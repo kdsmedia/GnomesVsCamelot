@@ -250,7 +250,7 @@ public class GameManager : Singleton<GameManager>
         else if (Input.GetMouseButton(button)) result = 2;
         else if (Input.GetMouseButtonUp(button)) result = 3;
 
-        if (result == 0 && Input.touchSupported)
+        if (result == 0 && Input.touchSupported && Input.touchCount > 0)
         {
             TouchPhase touchPhase = Input.GetTouch(button).phase;
             switch (touchPhase)
