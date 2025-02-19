@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UIElements;
+using NUnit.Framework.Internal.Filters;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -18,12 +19,16 @@ public class GameManager : Singleton<GameManager>
     private bool touchBegan = false;
     private GameObject placementIndicator = null;
     public Dictionary<Vector3Int, GnomeBase> placedGnomes = new Dictionary<Vector3Int, GnomeBase>();
-    public List<GameObject> knightQueue;
+    public List<GameObject> spawnedKnights = new List<GameObject>();
     private int placementType = 0;
-    public float knightSpawnInterval = 1.5f;
-    private int knightsToSpawn = 0; // Number of knights left to spawn in the current wave
-    private bool isWaveActive = false;
-    private float knightSpawnTimer = 0f;
+    //public float knightSpawnInterval = 1.5f;
+    //private int knightsToSpawn = 0; // Number of knights left to spawn in the current wave
+    //private bool isWaveActive = false;
+    //private float knightSpawnTimer = 0f;
+
+    public KnightSpawnStruct[] knightSpawnInformation;
+    public GameObject[] knightPrefabs;
+    private int knightSpawnIndex = 0;
 
     public TMP_Text energyText;
     public TMP_Text waveText;
@@ -32,18 +37,31 @@ public class GameManager : Singleton<GameManager>
     public GameObject gameOverPanel;
 
     private int playerEnergy = 100;
-    private int currentWave = 1;
-    private int maxWaves = 5;
+    public int currentWave = 1;
+    public int maxWaves = 5;
     private bool gameEnded = false;
 
     public bool isFastForward = false;
 
-    private float dt = 0;
+    private float timeElapsed = 0;
+    private float lastSpawnTime = 0;
+    private int energyTicksProcessed = 0;
+    private List<int> spawnQueue = new List<int>();
 
 
     private void Start()
     {
-        knightSpawnTimer = knightSpawnInterval;
+        Inititialize();
+    }
+
+    public void Inititialize()
+    {
+        knightSpawnIndex = 0;
+        timeElapsed = 0;
+        lastSpawnTime = 0;
+        energyTicksProcessed = 0;
+        currentWave = 1;
+        spawnedKnights.Clear();
         UpdateWaveUI();
         pauseMenu.SetActive(false);
         winnerPanel.SetActive(false);
@@ -54,20 +72,17 @@ public class GameManager : Singleton<GameManager>
     {
         if (gameEnded) return;
 
-        dt += Time.deltaTime;
-        if (dt >= 1f)
-        {
-            var secondsPassed = Mathf.FloorToInt(dt);
-            playerEnergy += secondsPassed;
-            dt -= secondsPassed;
-        }
+        timeElapsed += Time.deltaTime;
+        playerEnergy += Mathf.FloorToInt(timeElapsed - energyTicksProcessed);
+        energyTicksProcessed = Mathf.FloorToInt(timeElapsed);
+
         UpdateEnergyUI();
 
         int input = getInput(0);
         if (input == 1)
         {
             placementType = -1;
-            for (int i = 0; i < gnomeUILocations.Length; i++)
+            for(int i = 0; i < gnomeUILocations.Length; i++)
             {
                 if (RectTransformUtility.RectangleContainsScreenPoint(gnomeUILocations[i], getInputLocation()))
                 {
@@ -86,34 +101,37 @@ public class GameManager : Singleton<GameManager>
             PlaceGnome();
         }
 
-        knightSpawnTimer -= Time.deltaTime;
-        if (knightSpawnTimer <= 0)
-        {
-            SpawnKnight();
-            knightSpawnTimer = knightSpawnInterval;
-        }
 
         // Check if the player wins
-        if (currentWave > maxWaves && knightQueue.Count == 0)
+        if (knightSpawnIndex >= knightSpawnInformation.Length)
         {
-            ShowWinnerScreen();
+            if (spawnedKnights.Count == 0)
+            {
+                ShowWinnerScreen();
+            }
         }
-        if (isWaveActive)
+        else
         {
-            // Spawn knights during active waves
-            knightSpawnTimer -= Time.deltaTime;
-            if (knightSpawnTimer <= 0 && knightsToSpawn > 0)
-            {
-                SpawnKnight();
-                knightsToSpawn--;
-                knightSpawnTimer = knightSpawnInterval; // Reset the timer
-            }
 
-            // End the wave when all knights are spawned and defeated
-            if (knightsToSpawn <= 0 && knightQueue.Count == 0)
+            if (knightSpawnInformation[knightSpawnIndex].spawnTime <= timeElapsed)
             {
-                EndWave();
+                if (knightSpawnInformation[knightSpawnIndex].isWave)
+                {
+                    currentWave++;
+                    UpdateWaveUI();
+                }
+                foreach (int type in knightSpawnInformation[knightSpawnIndex].knights)
+                {
+                    spawnQueue.Add(type);
+                }
+                knightSpawnIndex++;
             }
+        }
+        if(spawnQueue.Count > 0 && timeElapsed - lastSpawnTime >= 0.1f)
+        {
+            SpawnKnight(knightPrefabs[spawnQueue[0]]);
+            spawnQueue.RemoveAt(0);
+            lastSpawnTime = timeElapsed;
         }
     }
 
@@ -165,7 +183,7 @@ public class GameManager : Singleton<GameManager>
             Vector3Int at = GetCell(GetWorld(getInputLocation()));
 
             //Use hardcoded values instead of cell bounds because if someone accidentally places a cell far away it would be a pain to identify the cause and location
-            if (at.x < 0 || at.x > 8 || at.y < 0 || at.y > 4)
+            if(at.x < 0 || at.x > 8 || at.y < 0 || at.y > 4)
             {
                 Debug.Log("Cannot place gnome: Out of bounds");
             }
@@ -177,8 +195,7 @@ public class GameManager : Singleton<GameManager>
                     return;
                 }
 
-                GnomeBase gnomeSelected = fullGnomes[placementType].GetComponent<GnomeBase>();
-                if (playerEnergy > gnomeSelected.cost)
+                if (playerEnergy > 0)
                 {
                     GameObject gnome = Instantiate(fullGnomes[placementType]);
                     gnome.transform.position = GetWorld(at) + new Vector3(map.cellSize.x * 0.5f, map.cellSize.y * 0.5f, 0);
@@ -188,8 +205,8 @@ public class GameManager : Singleton<GameManager>
 
                     Debug.Log($"Placed gnome of type {placementType} at {at}");
 
-                    playerEnergy -= gnomeData.cost;
-                }
+                    playerEnergy -= 25;
+                }                
             }
             else
             {
@@ -200,15 +217,16 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void SpawnKnight()
+    private void SpawnKnight(GameObject prefab)
     {
-        GameObject knightPrefab = knightQueue[UnityEngine.Random.Range(0, knightQueue.Count)];
-        GameObject knight = Instantiate(knightPrefab);
+        GameObject knight = Instantiate(prefab);  
 
         // Randomize spawn row
         int randomRow = UnityEngine.Random.Range(0, 5);
         Vector3Int spawnCell = new Vector3Int(9, randomRow, 0);
         knight.transform.position = GetWorld(spawnCell) + map.cellSize * 0.5f;
+
+        spawnedKnights.Add(knight);
     }
 
     private void ShowGameOverScreen()
@@ -222,61 +240,6 @@ public class GameManager : Singleton<GameManager>
     {
         gameEnded = true;
         winnerPanel.SetActive(true);
-        Time.timeScale = 0;
-    }
-    public void NextWave()
-    {
-        currentWave++;
-        UpdateWaveUI();
-
-        // Increase knight count for the wave
-        int knightCount = 5 + (currentWave * 2);
-        for (int i = 0; i < knightCount; i++)
-        {
-            GameObject knightPrefab = knightQueue[UnityEngine.Random.Range(0, knightQueue.Count)];
-            knightQueue.Add(knightPrefab); // Add knights to queue
-        }
-
-        winnerPanel.SetActive(false);
-        Time.timeScale = 1;
-    }
-    public void StartWave()
-    {
-        currentWave++;
-        UpdateWaveUI();
-        StartCoroutine(DelayedWaveStart());
-
-        knightsToSpawn = 5 + (currentWave + 2);
-        isWaveActive = true;
-
-
-        winnerPanel.SetActive(false);
-
-        // Resume game
-        Time.timeScale = 1;
-    }
-    private IEnumerator DelayedWaveStart()
-    {
-        yield return new WaitForSeconds(3f);
-
-
-        currentWave++;
-        UpdateWaveUI();
-
-        knightsToSpawn = 5 + (currentWave * 2);
-        isWaveActive = true;
-
-        winnerPanel.SetActive(false);
-
-        Time.timeScale = 1;
-    }
-    private void EndWave()
-    {
-        isWaveActive = false;
-
-        winnerPanel.SetActive(true);
-
-        // Pause the game
         Time.timeScale = 0;
     }
 
@@ -350,56 +313,23 @@ public class GameManager : Singleton<GameManager>
 
     public void TogglePauseMenu()
     {
-        bool isPaused = !pauseMenu.activeSelf;
-        pauseMenu.SetActive(isPaused);
-
-        if (isPaused)
-        {
-            Time.timeScale = 0; // Stop all movement and physics
-            AudioListener.pause = true; // Pause all audio
-            PauseAllEntities(true);
-        }
-        else
-        {
-            Time.timeScale = 1; // Resume game
-            AudioListener.pause = false;
-            PauseAllEntities(false);
-        }
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
+        Time.timeScale = pauseMenu.activeSelf ? 0 : 1;
     }
-    // Stops all moving objects and animations
-    private void PauseAllEntities(bool isPaused)
-    {
-        KnightBase[] knights = FindObjectsByType<KnightBase>(FindObjectsSortMode.None);
-        foreach (KnightBase knight in knights)
-        {
-            knight.enabled = !isPaused;
-        }
-
-        GnomeBase[] gnomes = FindObjectsByType<GnomeBase>(FindObjectsSortMode.None);
-        foreach (GnomeBase gnome in gnomes)
-        {
-            Animator animator = gnome.GetComponent<Animator>();
-            if (animator != null) animator.enabled = !isPaused;
-        }
-
-        AttackBase[] attacks = FindObjectsByType<AttackBase>(FindObjectsSortMode.None);
-        foreach (AttackBase attack in attacks)
-        {
-            attack.enabled = !isPaused;
-        }
-    }
-
     public void RestartGame()
     {
-        Time.timeScale = 1; // Ensure the game resumes
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
+        Time.timeScale = 1; // Ensure time is running
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-
 
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenuScene");
+    }
+
+    public void MarkKnightDeath(GameObject obj)
+    {
+        spawnedKnights.Remove(obj);
     }
 }
