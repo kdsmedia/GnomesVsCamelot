@@ -1,22 +1,29 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public Button newGameButton;
-    public Button loadGameButton;
+    private Button newGameButton;
+    private Button loadGameButton;
 
     private void Start()
     {
         Debug.Log("Main Menu Loaded.");
 
-        // ✅ Reassign buttons dynamically
+        // ✅ Find new buttons dynamically in the Main Menu scene
+        newGameButton = GameObject.Find("NewGameButton")?.GetComponent<Button>();
+        loadGameButton = GameObject.Find("LoadGameButton")?.GetComponent<Button>();
+
         if (newGameButton != null)
         {
-            newGameButton.onClick.RemoveAllListeners();
+            newGameButton.onClick.RemoveAllListeners(); // Clear old references
             newGameButton.onClick.AddListener(NewGame);
             Debug.Log("New Game Button Listener Added.");
+        }
+        else
+        {
+            Debug.LogError("New Game Button not found in scene!");
         }
 
         if (loadGameButton != null)
@@ -24,6 +31,10 @@ public class MainMenu : MonoBehaviour
             loadGameButton.onClick.RemoveAllListeners();
             loadGameButton.onClick.AddListener(LoadGame);
             Debug.Log("Load Game Button Listener Added.");
+        }
+        else
+        {
+            Debug.LogError("Load Game Button not found in scene!");
         }
     }
 
@@ -38,16 +49,5 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Load Game Button Clicked!");
         SceneManager.LoadScene("GameScene"); 
-    }
-
-    public void OpenOptions()
-    {
-        Debug.Log("Options Menu Opened");
-    }
-
-    public void ExitGame()
-    {
-        Debug.Log("Exiting Game...");
-        Application.Quit();
     }
 }
