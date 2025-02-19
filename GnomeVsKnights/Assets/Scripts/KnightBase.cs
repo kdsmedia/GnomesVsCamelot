@@ -27,7 +27,7 @@ public class KnightBase : CharacterBase
 
         if (!isAttacking)
         {
-            //DetectGnome();
+            DetectGnome();
         }
 
         if (isMoving)
@@ -35,10 +35,10 @@ public class KnightBase : CharacterBase
             Move();
         }
 
-        if (attackTimer > 0)
-        {
-            attackTimer -= Time.deltaTime;
-        }
+        //if (attackTimer > 0)
+        //{
+        //    DetectGnome();
+        //}
     }
 
     private void Move()
@@ -68,22 +68,32 @@ public class KnightBase : CharacterBase
 
     private void DetectGnome()
     {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, attackRange, targetLayer);
-        if (hit != null)
+        //Collider2D hit = Physics2D.OverlapCircle(transform.position, attackRange, targetLayer);
+        //if (hit != null)
+        //{
+        //    isMoving = false;
+        //    isAttacking = true;
+        //    //animator.SetBool("isWalking", false);
+        //    //animator.SetBool("isAttacking", true);
+        //    animator.SetTrigger("Attack");
+        //    Attack(hit.gameObject);
+        //}
+        //else
+        //{
+        //    isMoving = true;
+        //    isAttacking = false;
+        //    //animator.SetBool("isWalking", true);
+        //    //animator.SetBool("isAttacking", false);
+        //}
+        // Detects enemies and attacks when in range
+        float rayDistance = range * 2; // Convert range to world distance
+
+        // Perform a raycast to detect an enemy
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin.position, rayDirection, rayDistance, targetLayer);
+
+        if (hit.collider != null)
         {
             isMoving = false;
-            isAttacking = true;
-            //animator.SetBool("isWalking", false);
-            //animator.SetBool("isAttacking", true);
-            animator.SetTrigger("Attack");
-            Attack(hit.gameObject);
-        }
-        else
-        {
-            isMoving = true;
-            isAttacking = false;
-            //animator.SetBool("isWalking", true);
-            //animator.SetBool("isAttacking", false);
         }
     }
 
