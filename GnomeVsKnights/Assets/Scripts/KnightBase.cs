@@ -43,9 +43,16 @@ public class KnightBase : CharacterBase
 
     private void Move()
     {
+        if (GameManager.Instance == null || GameManager.Instance.map == null)
+        {
+            Destroy(gameObject);  // ✅ Destroy knight if GameManager or map is missing
+            return;
+        }
+
         transform.position += Vector3.left * moveSpeed * Time.deltaTime; // Move left
 
         Vector3Int currentCell = GameManager.Instance.map.WorldToCell(transform.position);
+
         if (currentCell.x <= -1 && currentCell.y >= 1 && currentCell.y <= 5)
         {
             GameManager.Instance.KnightReachedEnd();
@@ -57,6 +64,7 @@ public class KnightBase : CharacterBase
             animator.SetBool("isWalking", true);
         }
     }
+
 
     private void DetectGnome()
     {

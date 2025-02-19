@@ -43,6 +43,13 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        {
+            Debug.Log("GameManager disabled in Main Menu.");
+            this.enabled = false;
+            return;
+        }
+
         knightSpawnTimer = knightSpawnInterval;
         UpdateWaveUI();
         pauseMenu.SetActive(false);
@@ -50,8 +57,11 @@ public class GameManager : Singleton<GameManager>
         gameOverPanel.SetActive(false);
     }
 
+
     private void Update()
     {
+        if (!this.enabled) return;
+
         if (gameEnded) return;
 
         dt += Time.deltaTime;
@@ -62,6 +72,13 @@ public class GameManager : Singleton<GameManager>
             dt -= secondsPassed;
         }
         UpdateEnergyUI();
+
+        knightSpawnTimer -= Time.deltaTime;
+        if (knightSpawnTimer <= 0)
+        {
+            SpawnKnight();
+            knightSpawnTimer = knightSpawnInterval;
+        }
 
         int input = getInput(0);
         if (input == 1)
@@ -336,6 +353,12 @@ public class GameManager : Singleton<GameManager>
             placedGnomes.Remove(at);
         }
     }
+    public void ResetGame()
+    {
+        placedGnomes.Clear();  // ✅ Clears all placed gnomes
+        map = null;  // ✅ Remove Tilemap reference to prevent errors
+    }
+
 
     public void UpdateEnergyUI()
     {
@@ -365,6 +388,16 @@ public class GameManager : Singleton<GameManager>
             PauseAllEntities(false);
         }
     }
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        {
+            Destroy(gameObject);  // ✅ Destroy GameManager if it loads in Main Menu
+            return;
+        }
+    }
+
+
     // Stops all moving objects and animations
     private void PauseAllEntities(bool isPaused)
     {
