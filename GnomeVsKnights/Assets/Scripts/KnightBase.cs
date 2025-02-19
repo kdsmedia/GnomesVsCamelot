@@ -121,6 +121,7 @@ public class KnightBase : CharacterBase
         animator.SetBool("isWalking", false);
         animator.SetBool("isAttacking", false);
         animator.SetBool("isDead", true);
+        GameManager.Instance.MarkKnightDeath(gameObject);
 
         Destroy(gameObject, 1f); // Delay destruction for animation
     }

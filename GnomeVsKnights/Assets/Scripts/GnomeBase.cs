@@ -65,6 +65,7 @@ public class GnomeBase : CharacterBase
         {
             animator.SetTrigger("isDead");
         }
+        GameManager.Instance.KillGnome(Cell);
         Destroy(gameObject, 1f); // Allow animation to play before destroying
     }
 }
