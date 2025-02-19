@@ -7,11 +7,14 @@ using UnityEngine.SceneManagement;
 public class InGameOptions : MonoBehaviour
 {
     [Header("UI Elements")]
+    [SerializeField] private GameObject pauseMenu;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button applyButton;
     [SerializeField] private Button closeButton;
     [SerializeField] private Button restartButton;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button resumeButton;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicAudioSource;
@@ -33,8 +36,11 @@ public class InGameOptions : MonoBehaviour
         applyButton.onClick.AddListener(() => { PlayButtonSound(); ApplySettings(); });
         closeButton.onClick.AddListener(() => { PlayButtonSound(); CloseInGameOptions(); });
         restartButton.onClick.AddListener(() => { PlayButtonSound(); RestartScene(); });
+        pauseButton.onClick.AddListener(() => { PlayButtonSound(); PauseGame(); });
+        resumeButton.onClick.AddListener(() => { PlayButtonSound(); ResumeGame(); });
 
-        // Ensure saving UI is hidden initially
+        // Ensure pause menu & saving UI are hidden initially
+        pauseMenu.SetActive(false);
         saveMessage?.gameObject.SetActive(false);
         savingImage?.gameObject.SetActive(false);
     }
@@ -57,7 +63,7 @@ public class InGameOptions : MonoBehaviour
             musicAudioSource.volume = volume;
 
         if (AudioManager.Instance != null)
-            AudioManager.Instance.MusicSource.volume = volume;  // ✅ Uses public getter
+            AudioManager.Instance.MusicSource.volume = volume;
     }
 
     public void SetSFXVolume(float volume)
@@ -66,25 +72,23 @@ public class InGameOptions : MonoBehaviour
             sfxAudioSource.volume = volume;
 
         if (AudioManager.Instance != null)
-            AudioManager.Instance.SFXSource.volume = volume;  // ✅ Uses public getter
+            AudioManager.Instance.SFXSource.volume = volume;
     }
-
 
     public void ApplySettings()
     {
-        if (isSaving) return;
+        if (isSaving) return; // Prevent multiple saves at once
 
         isSaving = true;
 
-        if (savingImage != null) savingImage.gameObject.SetActive(true);
-        if (saveMessage != null)
-        {
-            saveMessage.gameObject.SetActive(true);
-            saveMessage.text = "Saving...";
-        }
+        // Show saving UI
+        savingImage.gameObject.SetActive(true);
+        saveMessage.gameObject.SetActive(true);
+        saveMessage.text = "Saving...";
 
         StartCoroutine(RotateSavingIcon());
 
+        // Save settings
         PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
         PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
         PlayerPrefs.Save();
@@ -96,7 +100,8 @@ public class InGameOptions : MonoBehaviour
 
     private IEnumerator HideSaveMessage()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2.5f); // Wait before hiding
+
         saveMessage?.gameObject.SetActive(false);
         savingImage?.gameObject.SetActive(false);
         isSaving = false;
@@ -112,10 +117,23 @@ public class InGameOptions : MonoBehaviour
         }
     }
 
-    public void SetGraphicsQuality(int index)
+    public void PauseGame()
     {
-        QualitySettings.SetQualityLevel(index);
-        PlayerPrefs.SetInt("GraphicsQuality", index);
+        Time.timeScale = 0;  
+        AudioListener.pause = true;
+        pauseMenu.SetActive(true);
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;  
+        AudioListener.pause = false;
+        pauseMenu.SetActive(false);
+
+        // ✅ Hide saving UI when resuming
+        saveMessage?.gameObject.SetActive(false);
+        savingImage?.gameObject.SetActive(false);
+        isSaving = false;
     }
 
     public void CloseInGameOptions()
