@@ -119,14 +119,14 @@ public class InGameOptions : MonoBehaviour
 
     public void PauseGame()
     {
-        Time.timeScale = 0;  
+        Time.timeScale = 0;
         AudioListener.pause = true;
         pauseMenu.SetActive(true);
     }
 
     public void ResumeGame()
     {
-        Time.timeScale = 1;  
+        Time.timeScale = 1;
         AudioListener.pause = false;
         pauseMenu.SetActive(false);
 
@@ -145,15 +145,25 @@ public class InGameOptions : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;  // ✅ Reset time so UI works
+        AudioListener.pause = false;  // ✅ Resume audio
         SceneManager.LoadScene("MainMenuScene");
     }
 
+
     public void RestartScene()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;  // ✅ Reset time so everything starts fresh
+        AudioListener.pause = false;  // ✅ Resume audio
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ResetGame();  // ✅ Reset all objects before restarting
+        }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
 
     private void PlayButtonSound()
     {

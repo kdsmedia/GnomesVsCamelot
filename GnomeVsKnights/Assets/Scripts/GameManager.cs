@@ -62,14 +62,25 @@ public class GameManager : Singleton<GameManager>
         energyTicksProcessed = 0;
         currentWave = 1;
         spawnedKnights.Clear();
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        {
+            Debug.Log("GameManager disabled in Main Menu.");
+            this.enabled = false;
+            return;
+        }
+
+        knightSpawnTimer = knightSpawnInterval;
         UpdateWaveUI();
         pauseMenu.SetActive(false);
         winnerPanel.SetActive(false);
         gameOverPanel.SetActive(false);
     }
 
+
     private void Update()
     {
+        if (!this.enabled) return;
+
         if (gameEnded) return;
 
         timeElapsed += Time.deltaTime;
@@ -77,6 +88,13 @@ public class GameManager : Singleton<GameManager>
         energyTicksProcessed = Mathf.FloorToInt(timeElapsed);
 
         UpdateEnergyUI();
+
+        knightSpawnTimer -= Time.deltaTime;
+        if (knightSpawnTimer <= 0)
+        {
+            SpawnKnight();
+            knightSpawnTimer = knightSpawnInterval;
+        }
 
         int input = getInput(0);
         if (input == 1)
@@ -300,6 +318,12 @@ public class GameManager : Singleton<GameManager>
             placedGnomes.Remove(at);
         }
     }
+    public void ResetGame()
+    {
+        placedGnomes.Clear();  // ✅ Clears all placed gnomes
+        map = null;  // ✅ Remove Tilemap reference to prevent errors
+    }
+
 
     public void UpdateEnergyUI()
     {
@@ -316,6 +340,40 @@ public class GameManager : Singleton<GameManager>
         pauseMenu.SetActive(!pauseMenu.activeSelf);
         Time.timeScale = pauseMenu.activeSelf ? 0 : 1;
     }
+
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        {
+            Destroy(gameObject);  // ✅ Destroy GameManager if it loads in Main Menu
+            return;
+        }
+    }
+
+
+    // Stops all moving objects and animations
+    private void PauseAllEntities(bool isPaused)
+    {
+        KnightBase[] knights = FindObjectsByType<KnightBase>(FindObjectsSortMode.None);
+        foreach (KnightBase knight in knights)
+        {
+            knight.enabled = !isPaused;
+        }
+
+        GnomeBase[] gnomes = FindObjectsByType<GnomeBase>(FindObjectsSortMode.None);
+        foreach (GnomeBase gnome in gnomes)
+        {
+            Animator animator = gnome.GetComponent<Animator>();
+            if (animator != null) animator.enabled = !isPaused;
+        }
+
+        AttackBase[] attacks = FindObjectsByType<AttackBase>(FindObjectsSortMode.None);
+        foreach (AttackBase attack in attacks)
+        {
+            attack.enabled = !isPaused;
+        }
+    }
+
     public void RestartGame()
     {
         Time.timeScale = 1; // Ensure time is running
