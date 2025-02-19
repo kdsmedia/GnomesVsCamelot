@@ -422,11 +422,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9757d128ea98f04d99717139e5b9269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 294668995}
   musicSlider: {fileID: 1465542584}
   sfxSlider: {fileID: 57930777}
   applyButton: {fileID: 1271090671}
   closeButton: {fileID: 920643073}
   restartButton: {fileID: 749898351}
+  pauseButton: {fileID: 1885179611}
+  resumeButton: {fileID: 920643073}
   musicAudioSource: {fileID: 571391337}
   sfxAudioSource: {fileID: 1246604419}
   saveMessage: {fileID: 2099714002}
@@ -5205,7 +5208,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 22270615}
         m_TargetAssemblyTypeName: InGameOptions, Assembly-CSharp
-        m_MethodName: CloseInGameOptions
+        m_MethodName: ResumeGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9668,10 +9671,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 294668995}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 22270615}
+        m_TargetAssemblyTypeName: InGameOptions, Assembly-CSharp
+        m_MethodName: PauseGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
