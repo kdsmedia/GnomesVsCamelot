@@ -145,10 +145,11 @@ public class InGameOptions : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1f;  // ✅ Reset time so UI works
-        AudioListener.pause = false;  // ✅ Resume audio
+        Time.timeScale = 1f;  // ✅ Ensure time is resumed
+        AudioListener.pause = false;  // ✅ Ensure audio resumes
         SceneManager.LoadScene("MainMenuScene");
     }
+
 
 
     public void RestartScene()

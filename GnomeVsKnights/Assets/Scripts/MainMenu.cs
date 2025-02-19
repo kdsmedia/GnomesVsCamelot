@@ -1,31 +1,43 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public Button newGameButton;
+    public Button loadGameButton;
+
+    private void Start()
+    {
+        Debug.Log("Main Menu Loaded.");
+
+        // ✅ Reassign buttons dynamically
+        if (newGameButton != null)
+        {
+            newGameButton.onClick.RemoveAllListeners();
+            newGameButton.onClick.AddListener(NewGame);
+            Debug.Log("New Game Button Listener Added.");
+        }
+
+        if (loadGameButton != null)
+        {
+            loadGameButton.onClick.RemoveAllListeners();
+            loadGameButton.onClick.AddListener(LoadGame);
+            Debug.Log("Load Game Button Listener Added.");
+        }
+    }
+
     public void NewGame()
     {
-        Debug.Log("New Game Button Clicked!"); // ✅ Debug log to confirm it's clicking
-        Time.timeScale = 1f;  // ✅ Ensure time is reset
-        SceneManager.LoadScene("GameScene");  // ✅ Load the game scene
+        Debug.Log("New Game Button Clicked!");
+        Time.timeScale = 1f;  
+        SceneManager.LoadScene("GameScene");
     }
 
     public void LoadGame()
     {
-        Debug.Log("Load Game Button Clicked!"); // ✅ Debug log to confirm it's clicking
-
-        if (PlayerPrefs.HasKey("SavedScene"))
-        {
-            string savedScene = PlayerPrefs.GetString("SavedScene");
-            Debug.Log("Loading saved game scene: " + savedScene);
-            Time.timeScale = 1f;  
-            SceneManager.LoadScene(savedScene);  
-        }
-        else
-        {
-            Debug.Log("No saved game found! Starting new game...");
-            NewGame(); // ✅ If no save is found, start a new game
-        }
+        Debug.Log("Load Game Button Clicked!");
+        SceneManager.LoadScene("GameScene"); 
     }
 
     public void OpenOptions()
