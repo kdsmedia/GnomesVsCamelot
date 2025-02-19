@@ -37,4 +37,11 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Load Game Button Clicked!");
         SceneManager.LoadScene("GameScene"); 
     }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quit Game Button Clicked!");
+        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+    }
 }
