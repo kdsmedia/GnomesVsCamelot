@@ -11,7 +11,7 @@ public class InGameOptions : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button applyButton;
     [SerializeField] private Button closeButton;
-    [SerializeField] private Button restartButton; // 🔹 New Restart Button
+    [SerializeField] private Button restartButton;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicAudioSource;
@@ -30,9 +30,9 @@ public class InGameOptions : MonoBehaviour
 
         musicSlider.onValueChanged.AddListener(SetMusicVolume);
         sfxSlider.onValueChanged.AddListener(SetSFXVolume);
-        applyButton.onClick.AddListener(ApplySettings);
-        closeButton.onClick.AddListener(CloseInGameOptions);
-        restartButton.onClick.AddListener(RestartScene); // 🔹 Hook up Restart Button
+        applyButton.onClick.AddListener(() => { PlayButtonSound(); ApplySettings(); });
+        closeButton.onClick.AddListener(() => { PlayButtonSound(); CloseInGameOptions(); });
+        restartButton.onClick.AddListener(() => { PlayButtonSound(); RestartScene(); });
 
         // Ensure saving UI is hidden initially
         saveMessage?.gameObject.SetActive(false);
@@ -47,7 +47,6 @@ public class InGameOptions : MonoBehaviour
         musicSlider.value = musicVolume;
         sfxSlider.value = sfxVolume;
 
-        // Apply settings when loading
         SetMusicVolume(musicVolume);
         SetSFXVolume(sfxVolume);
     }
@@ -56,13 +55,20 @@ public class InGameOptions : MonoBehaviour
     {
         if (musicAudioSource != null)
             musicAudioSource.volume = volume;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.MusicSource.volume = volume;  // ✅ Uses public getter
     }
 
     public void SetSFXVolume(float volume)
     {
         if (sfxAudioSource != null)
             sfxAudioSource.volume = volume;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.SFXSource.volume = volume;  // ✅ Uses public getter
     }
+
 
     public void ApplySettings()
     {
@@ -125,10 +131,17 @@ public class InGameOptions : MonoBehaviour
         SceneManager.LoadScene("MainMenuScene");
     }
 
-    // 🔹 **New Method to Restart Scene**
     public void RestartScene()
     {
-        Time.timeScale = 1f; // Ensure game time is reset
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reloads the current level
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void PlayButtonSound()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClickSound);
+        }
     }
 }
