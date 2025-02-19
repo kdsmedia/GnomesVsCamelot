@@ -27,7 +27,7 @@ public class KnightBase : CharacterBase
 
         if (!isAttacking)
         {
-            DetectGnome();
+            //DetectGnome();
         }
 
         if (isMoving)
@@ -81,6 +81,7 @@ public class KnightBase : CharacterBase
 
     protected override void Attack(GameObject target)
     {
+        isMoving = false;
         if (animator != null)
         {
             animator.SetTrigger("Attack");
@@ -138,13 +139,14 @@ public class KnightBase : CharacterBase
         //animator.SetBool("isAttacking", false);
         //animator.SetBool("isDead", true);
         animator.SetTrigger("isDead");
+        GameManager.Instance.MarkKnightDeath(gameObject);
 
         Destroy(gameObject, 1f); // Delay destruction for animation
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, attackRange);
+    //}
 }

@@ -422,11 +422,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9757d128ea98f04d99717139e5b9269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 294668995}
   musicSlider: {fileID: 1465542584}
   sfxSlider: {fileID: 57930777}
   applyButton: {fileID: 1271090671}
   closeButton: {fileID: 920643073}
   restartButton: {fileID: 749898351}
+  pauseButton: {fileID: 1885179611}
+  resumeButton: {fileID: 920643073}
   musicAudioSource: {fileID: 571391337}
   sfxAudioSource: {fileID: 1246604419}
   saveMessage: {fileID: 2099714002}
@@ -8728,9 +8731,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b80ee0d6fae8e2479773f26cf70108d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MusicSource: {fileID: 571391337}
-  SFXSource: {fileID: 1246604419}
+  musicSource: {fileID: 571391337}
+  sfxSource: {fileID: 1246604419}
   backgroundMusic: {fileID: 8300000, guid: 6d23194c682231447a84aa74c2c0070f, type: 3}
+  buttonClickSound: {fileID: 8300000, guid: 61ec4d594c5f69b498bd3e29d9791df2, type: 3}
 --- !u!4 &1780151177
 Transform:
   m_ObjectHideFlags: 0
