@@ -4,7 +4,9 @@ using UnityEngine.UIElements;
 public class EnergyGnome : MonoBehaviour
 {
     private float fallYPos;
-    private float fallSpeed = .2f;
+    private float fallSpeed = .8f;
+    private int energyValue = 25;
+
     void Start()
     {
         transform.position = new Vector3(Random.Range(-5.3f, 5.3f), 7, -0.1f);
@@ -16,8 +18,14 @@ public class EnergyGnome : MonoBehaviour
     {
         if (transform.position.y >= fallYPos)
         {
-            transform.position -= new Vector3(0, fallSpeed * Time.fixedDeltaTime, 0);
-            transform.Rotate(0f, 0f, 80f * Time.fixedDeltaTime);
+            transform.position -= new Vector3(0, fallSpeed * Time.deltaTime, 0);
+            transform.Rotate(0f, 0f, 150f * Time.deltaTime);
         }
+    }
+
+    public void OnMouseOver()
+    {
+        Destroy(gameObject);
+        GameManager.Instance.AddEnergy(energyValue);
     }
 }
