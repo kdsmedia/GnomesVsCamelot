@@ -18,7 +18,7 @@ public class KnightBase : CharacterBase
     protected override void Start()
     {
         base.Start();
-        animator.SetBool("isWalking", true); // Start walking by default
+        //animator.SetBool("isWalking", true); // Start walking by default
     }
 
     protected override void Update()
@@ -54,7 +54,7 @@ public class KnightBase : CharacterBase
 
         if (animator != null)
         {
-            animator.SetBool("isWalking", true);
+            //animator.SetBool("isWalking", true);
         }
     }
 
@@ -65,16 +65,17 @@ public class KnightBase : CharacterBase
         {
             isMoving = false;
             isAttacking = true;
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isAttacking", true);
+            //animator.SetBool("isWalking", false);
+            //animator.SetBool("isAttacking", true);
+            animator.SetTrigger("Attack");
             Attack(hit.gameObject);
         }
         else
         {
             isMoving = true;
             isAttacking = false;
-            animator.SetBool("isWalking", true);
-            animator.SetBool("isAttacking", false);
+            //animator.SetBool("isWalking", true);
+            //animator.SetBool("isAttacking", false);
         }
     }
 
@@ -108,8 +109,8 @@ public class KnightBase : CharacterBase
     {
         isAttacking = false;
         isMoving = true;
-        animator.SetBool("isWalking", true);
-        animator.SetBool("isAttacking", false);
+        //animator.SetBool("isWalking", true);
+        //animator.SetBool("isAttacking", false);
     }
 
     public override void TakeDamage(int damage)
@@ -121,7 +122,7 @@ public class KnightBase : CharacterBase
             animator.SetTrigger("isHit"); // Play hurt animation
         }
 
-        Invoke(nameof(ResetHitState), 0.5f); // After hit animation, return to state
+        //Invoke(nameof(ResetHitState), 0.5f); // After hit animation, return to state
     }
 
     private void ResetHitState()
@@ -133,9 +134,10 @@ public class KnightBase : CharacterBase
     {
         isMoving = false;
         isAttacking = false;
-        animator.SetBool("isWalking", false);
-        animator.SetBool("isAttacking", false);
-        animator.SetBool("isDead", true);
+        //animator.SetBool("isWalking", false);
+        //animator.SetBool("isAttacking", false);
+        //animator.SetBool("isDead", true);
+        animator.SetTrigger("isDead");
 
         Destroy(gameObject, 1f); // Delay destruction for animation
     }
