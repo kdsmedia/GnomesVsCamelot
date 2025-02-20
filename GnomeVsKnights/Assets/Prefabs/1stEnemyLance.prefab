@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3157623652887934443}
   - component: {fileID: 3093577380285537305}
   - component: {fileID: 2269089327321115729}
-  - component: {fileID: 3941464759406481785}
+  - component: {fileID: -789664550283563171}
   m_Layer: 7
   m_Name: 1stEnemyLance
   m_TagString: Untagged
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
-  health: 50
+  health: 100
   attackRate: 1
   attackDamage: 10
-  range: 2
+  range: 0.75
   attackPrefab: {fileID: 0}
   rayOrigin: {fileID: 2280550891200031426}
   rayDirection: {x: -1, y: 0, z: 0}
@@ -139,7 +139,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3941464759406481785
+--- !u!61 &-789664550283563171
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,11 +169,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.2779539, y: 0}
+  m_Offset: {x: -0.28784508, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -183,5 +183,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.74409217, y: 0.99}
+  m_Size: {x: 0.7243098, y: 0.99}
   m_EdgeRadius: 0

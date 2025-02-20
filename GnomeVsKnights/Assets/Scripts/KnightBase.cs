@@ -18,7 +18,7 @@ public class KnightBase : CharacterBase
     protected override void Start()
     {
         base.Start();
-        animator.SetBool("isWalking", true); // Start walking by default
+        //animator.SetBool("isWalking", true); // Start walking by default
     }
 
     protected override void Update()
@@ -35,10 +35,10 @@ public class KnightBase : CharacterBase
             Move();
         }
 
-        if (attackTimer > 0)
-        {
-            attackTimer -= Time.deltaTime;
-        }
+        //if (attackTimer > 0)
+        //{
+        //    DetectGnome();
+        //}
     }
 
     private void Move()
@@ -61,33 +61,45 @@ public class KnightBase : CharacterBase
 
         if (animator != null)
         {
-            animator.SetBool("isWalking", true);
+            //animator.SetBool("isWalking", true);
         }
     }
 
 
     private void DetectGnome()
     {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, attackRange, targetLayer);
-        if (hit != null)
+        //Collider2D hit = Physics2D.OverlapCircle(transform.position, attackRange, targetLayer);
+        //if (hit != null)
+        //{
+        //    isMoving = false;
+        //    isAttacking = true;
+        //    //animator.SetBool("isWalking", false);
+        //    //animator.SetBool("isAttacking", true);
+        //    animator.SetTrigger("Attack");
+        //    Attack(hit.gameObject);
+        //}
+        //else
+        //{
+        //    isMoving = true;
+        //    isAttacking = false;
+        //    //animator.SetBool("isWalking", true);
+        //    //animator.SetBool("isAttacking", false);
+        //}
+        // Detects enemies and attacks when in range
+        float rayDistance = range * 2; // Convert range to world distance
+
+        // Perform a raycast to detect an enemy
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin.position, rayDirection, rayDistance, targetLayer);
+
+        if (hit.collider != null)
         {
             isMoving = false;
-            isAttacking = true;
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isAttacking", true);
-            Attack(hit.gameObject);
-        }
-        else
-        {
-            isMoving = true;
-            isAttacking = false;
-            animator.SetBool("isWalking", true);
-            animator.SetBool("isAttacking", false);
         }
     }
 
     protected override void Attack(GameObject target)
     {
+        isMoving = false;
         if (animator != null)
         {
             animator.SetTrigger("Attack");
@@ -116,8 +128,8 @@ public class KnightBase : CharacterBase
     {
         isAttacking = false;
         isMoving = true;
-        animator.SetBool("isWalking", true);
-        animator.SetBool("isAttacking", false);
+        //animator.SetBool("isWalking", true);
+        //animator.SetBool("isAttacking", false);
     }
 
     public override void TakeDamage(int damage)
@@ -129,7 +141,7 @@ public class KnightBase : CharacterBase
             animator.SetTrigger("isHit"); // Play hurt animation
         }
 
-        Invoke(nameof(ResetHitState), 0.5f); // After hit animation, return to state
+        //Invoke(nameof(ResetHitState), 0.5f); // After hit animation, return to state
     }
 
     private void ResetHitState()
@@ -141,16 +153,18 @@ public class KnightBase : CharacterBase
     {
         isMoving = false;
         isAttacking = false;
-        animator.SetBool("isWalking", false);
-        animator.SetBool("isAttacking", false);
-        animator.SetBool("isDead", true);
+        //animator.SetBool("isWalking", false);
+        //animator.SetBool("isAttacking", false);
+        //animator.SetBool("isDead", true);
+        animator.SetTrigger("isDead");
+        GameManager.Instance.MarkKnightDeath(gameObject);
 
         Destroy(gameObject, 1f); // Delay destruction for animation
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawWireSphere(transform.position, attackRange);
+    //}
 }
