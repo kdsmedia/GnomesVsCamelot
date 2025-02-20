@@ -1,41 +1,47 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public static MainMenu Instance;
+    public GameObject menuPrefab; // Assign in Inspector
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            
+            if (menuPrefab != null)
+            {
+                Instantiate(menuPrefab, transform);
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void NewGame()
     {
-        Debug.Log("New Game Button Clicked!"); // ✅ Debug log to confirm it's clicking
-        Time.timeScale = 1f;  // ✅ Ensure time is reset
-        SceneManager.LoadScene("GameScene");  // ✅ Load the game scene
+        Debug.Log("New Game Button Clicked!");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameScene");
     }
 
     public void LoadGame()
     {
-        Debug.Log("Load Game Button Clicked!"); // ✅ Debug log to confirm it's clicking
-
-        if (PlayerPrefs.HasKey("SavedScene"))
-        {
-            string savedScene = PlayerPrefs.GetString("SavedScene");
-            Debug.Log("Loading saved game scene: " + savedScene);
-            Time.timeScale = 1f;  
-            SceneManager.LoadScene(savedScene);  
-        }
-        else
-        {
-            Debug.Log("No saved game found! Starting new game...");
-            NewGame(); // ✅ If no save is found, start a new game
-        }
+        Debug.Log("Load Game Button Clicked!");
+        SceneManager.LoadScene("GameScene"); 
     }
 
-    public void OpenOptions()
+    public void QuitGame()
     {
-        Debug.Log("Options Menu Opened");
-    }
-
-    public void ExitGame()
-    {
-        Debug.Log("Exiting Game...");
+        Debug.Log("Quit Game Button Clicked!");
+        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }
