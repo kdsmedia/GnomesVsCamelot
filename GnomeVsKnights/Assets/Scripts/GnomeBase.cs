@@ -4,7 +4,7 @@ using UnityEngine;
 public class GnomeBase : CharacterBase
 {
     [Header("Gnome Settings")]
-    [SerializeField] private int cost = 25;
+    [SerializeField] public int cost = 25;
 
     public Vector3Int Cell { get; set; }
 
