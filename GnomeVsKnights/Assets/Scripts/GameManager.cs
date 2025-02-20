@@ -38,9 +38,6 @@ public class GameManager : Singleton<GameManager>
 
     public bool isFastForward = false;
 
-    private float dt = 0;
-
-
     private void Start()
     {
         if (SceneManager.GetActiveScene().name == "MainMenuScene")
@@ -63,14 +60,7 @@ public class GameManager : Singleton<GameManager>
         if (!this.enabled) return;
 
         if (gameEnded) return;
-
-        dt += Time.deltaTime;
-        if (dt >= 1f)
-        {
-            var secondsPassed = Mathf.FloorToInt(dt);
-            playerEnergy += secondsPassed;
-            dt -= secondsPassed;
-        }
+        
         UpdateEnergyUI();
 
         knightSpawnTimer -= Time.deltaTime;
