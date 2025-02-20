@@ -50,21 +50,16 @@ public class GameManager : Singleton<GameManager>
     private int energyTicksProcessed = 0;
     private List<int> spawnQueue = new List<int>();
 
-
+     public static GameManager Instance { get; private set; }
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            Debug.Log("GameManager disabled in Main Menu.");
-            this.enabled = false;
-            return;
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySceneMusic("GameScene");  // ✅ Play game scene music
+            }
         }
-
-        //knightSpawnTimer = knightSpawnInterval;
-        //UpdateWaveUI();
-        //pauseMenu.SetActive(false);
-        //winnerPanel.SetActive(false);
-        //gameOverPanel.SetActive(false);
     }
 
     public void Inititialize()
@@ -87,24 +82,9 @@ public class GameManager : Singleton<GameManager>
 
         if (gameEnded) return;
 
-        //dt += Time.deltaTime;
-        //if (dt >= 1f)
-        //{
-        //    var secondsPassed = Mathf.FloorToInt(dt);
-        //    playerEnergy += secondsPassed;
-        //    dt -= secondsPassed;
-        //}
 
-        //knightSpawnTimer -= Time.deltaTime;
-        //if (knightSpawnTimer <= 0)
-        //{
-        //    SpawnKnight();
-        //    knightSpawnTimer = knightSpawnInterval;
-        //}
 
         timeElapsed += Time.deltaTime;
-        //playerEnergy += Mathf.FloorToInt(timeElapsed - energyTicksProcessed);
-        //energyTicksProcessed = Mathf.FloorToInt(timeElapsed);
         UpdateEnergyUI();
 
         int input = getInput(0);
@@ -129,13 +109,6 @@ public class GameManager : Singleton<GameManager>
         {
             PlaceGnome();
         }
-
-        //knightSpawnTimer -= Time.deltaTime;
-        //if (knightSpawnTimer <= 0)
-        //{
-        //    SpawnKnight();
-        //    knightSpawnTimer = knightSpawnInterval;
-        //}
 
         // Check if the player wins
         if (knightSpawnIndex >= knightSpawnInformation.Length)
@@ -168,27 +141,6 @@ public class GameManager : Singleton<GameManager>
             spawnQueue.RemoveAt(0);
             lastSpawnTime = timeElapsed;
         }
-        //if (currentWave > maxWaves && knightQueue.Count == 0)
-        //{
-        //    ShowWinnerScreen();
-        //}
-        //if (isWaveActive)
-        //{
-        //    // Spawn knights during active waves
-        //    knightSpawnTimer -= Time.deltaTime;
-        //    if (knightSpawnTimer <= 0 && knightsToSpawn > 0)
-        //    {
-        //        SpawnKnight();
-        //        knightsToSpawn--;
-        //        knightSpawnTimer = knightSpawnInterval; // Reset the timer
-        //    }
-
-        //    // End the wave when all knights are spawned and defeated
-        //    if (knightsToSpawn <= 0 && knightQueue.Count == 0)
-        //    {
-        //        EndWave();
-        //    }
-        //}
     }
 
     public void ToggleFastForward()
@@ -297,20 +249,33 @@ public class GameManager : Singleton<GameManager>
         spawnedKnights.Add(knight);
     }
 
-    private void ShowGameOverScreen()
-    {
-        gameEnded = true;
-        gameOverPanel.SetActive(true);
-        Time.timeScale = 0; // Pause game
-    }
-
     private void ShowWinnerScreen()
     {
         gameEnded = true;
         winnerPanel.SetActive(true);
         Time.timeScale = 0;
-        print("Win");
+
+        // ✅ Play winner music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.winnerMusic);
+        }
     }
+
+    private void ShowGameOverScreen()
+    {
+        gameEnded = true;
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0;
+
+        // ✅ Play game over music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.gameOverMusic);
+        }
+    }
+
+
     //public void NextWave()
     //{
     //    currentWave++;
@@ -461,9 +426,13 @@ public class GameManager : Singleton<GameManager>
     }
     private void Awake()
     {
-        if (SceneManager.GetActiveScene().name == "MainMenuScene")
+        if (Instance == null)
         {
-            Destroy(gameObject);  // ✅ Destroy GameManager if it loads in Main Menu
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
             return;
         }
     }
@@ -507,6 +476,12 @@ public class GameManager : Singleton<GameManager>
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySceneMusic("MainMenuScene");  // ✅ Switch back to main menu music
+        }
+
         SceneManager.LoadScene("MainMenuScene");
     }
 }

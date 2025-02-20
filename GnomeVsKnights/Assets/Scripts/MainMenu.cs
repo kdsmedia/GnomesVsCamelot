@@ -1,11 +1,10 @@
+﻿using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     public static MainMenu Instance;
-    public GameObject menuPrefab; // Assign in Inspector
+    public GameObject menuPrefab;
 
     private void Awake()
     {
@@ -13,7 +12,7 @@ public class MainMenu : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
+
             if (menuPrefab != null)
             {
                 Instantiate(menuPrefab, transform);
@@ -21,7 +20,15 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Prevent duplicate main menu instances
+        }
+    }
+
+    private void Start()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySceneMusic("MainMenuScene");
         }
     }
 
@@ -29,14 +36,27 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("New Game Button Clicked!");
         Time.timeScale = 1f;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.MusicSource.Stop();  // ✅ No more errors
+        }
+
         SceneManager.LoadScene("GameScene");
     }
 
     public void LoadGame()
     {
         Debug.Log("Load Game Button Clicked!");
-        SceneManager.LoadScene("GameScene"); 
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.MusicSource.Stop();  // ✅ No more errors
+        }
+
+        SceneManager.LoadScene("GameScene");
     }
+
 
     public void QuitGame()
     {
