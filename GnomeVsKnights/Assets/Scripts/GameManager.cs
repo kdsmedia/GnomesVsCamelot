@@ -103,8 +103,8 @@ public class GameManager : Singleton<GameManager>
         //}
 
         timeElapsed += Time.deltaTime;
-        playerEnergy += Mathf.FloorToInt(timeElapsed - energyTicksProcessed);
-        energyTicksProcessed = Mathf.FloorToInt(timeElapsed);
+        //playerEnergy += Mathf.FloorToInt(timeElapsed - energyTicksProcessed);
+        //energyTicksProcessed = Mathf.FloorToInt(timeElapsed);
         UpdateEnergyUI();
 
         int input = getInput(0);
@@ -252,7 +252,7 @@ public class GameManager : Singleton<GameManager>
                 }
 
                 GnomeBase gnomeCost = fullGnomes[placementType].GetComponent<GnomeBase>();
-                if (playerEnergy > gnomeCost.cost)
+                if (playerEnergy >= gnomeCost.cost)
                 {
                     GameObject gnome = Instantiate(fullGnomes[placementType]);
                     gnome.transform.position = GetWorld(at) + new Vector3(map.cellSize.x * 0.5f, map.cellSize.y * 0.5f, 0);
