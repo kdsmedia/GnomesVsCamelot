@@ -321,4 +321,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78dd88e0248725546aa6f224f983c365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuPrefab: {fileID: 0}
+  menuPrefab: {fileID: 7165061487894289351}
