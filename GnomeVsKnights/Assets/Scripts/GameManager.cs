@@ -359,6 +359,11 @@ public class GameManager : Singleton<GameManager>
         map = null;  // ✅ Remove Tilemap reference to prevent errors
     }
 
+    public void AddEnergy(int amount)
+    {
+        playerEnergy += amount;
+        UpdateEnergyUI();
+    }
 
     public void UpdateEnergyUI()
     {
