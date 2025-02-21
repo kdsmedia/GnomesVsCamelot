@@ -21,16 +21,14 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;  // ✅ Assign the instance first
-            DontDestroyOnLoad(gameObject);  // ✅ Keep AudioManager across scenes
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);  // ✅ Destroy duplicate instances
+            Destroy(gameObject);  // ✅ Destroy duplicates first
             return;
         }
+
+        Instance = this;  // ✅ Assign the instance AFTER duplicate check
+        DontDestroyOnLoad(gameObject);  // ✅ Ensure persistence AFTER ensuring uniqueness
     }
 
     private void Start()
@@ -74,7 +72,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ✅ Play special music (Winner/Game Over)
     public void PlayCustomMusic(AudioClip musicClip)
     {
         if (musicSource == null || musicClip == null) return;
@@ -87,7 +84,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ✅ Play Sound Effects
     public void PlaySFX(AudioClip clip)
     {
         if (sfxSource != null && clip != null)
