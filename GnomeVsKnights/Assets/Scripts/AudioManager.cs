@@ -1,22 +1,21 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
-    [Header("------Audio Source-----")]
+    [Header("------ Audio Sources -----")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
 
-    [Header("------Audio Clips-----")]
+    [Header("------ Audio Clips -----")]
     public AudioClip mainMenuMusic;
     public AudioClip gameSceneMusic;
     public AudioClip winnerMusic;
     public AudioClip gameOverMusic;
     public AudioClip buttonClickSound;
 
-    // ✅ Public getters for Music and SFX sources
     public AudioSource MusicSource => musicSource;
     public AudioSource SFXSource => sfxSource;
 
@@ -24,12 +23,12 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance == null)
         {
-            Instance = this;
+            Instance = this;  // ✅ Assign the instance first
             DontDestroyOnLoad(gameObject);  // ✅ Keep AudioManager across scenes
         }
-        else
+        else if (Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(gameObject);  // ✅ Destroy duplicate instances
             return;
         }
     }
@@ -43,8 +42,7 @@ public class AudioManager : MonoBehaviour
             float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
             musicSource.volume = savedVolume;
 
-            // ✅ Ensure music starts playing
-            if (!musicSource.isPlaying)
+            if (!musicSource.isPlaying)  // ✅ Ensure music starts playing
             {
                 PlaySceneMusic(SceneManager.GetActiveScene().name);
             }
@@ -76,7 +74,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ✅ Add missing PlayCustomMusic method
+    // ✅ Play special music (Winner/Game Over)
     public void PlayCustomMusic(AudioClip musicClip)
     {
         if (musicSource == null || musicClip == null) return;
@@ -89,7 +87,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // ✅ Add missing PlaySFX method
+    // ✅ Play Sound Effects
     public void PlaySFX(AudioClip clip)
     {
         if (sfxSource != null && clip != null)
