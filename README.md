@@ -32,6 +32,7 @@ Now, the gnomes must use their **wit, magic, and nature’s defenses** to **hold
 
 ---
 
+
 ## 🛠 **Recent Updates (Feb 24, 2025)**  
 
 ### **🔹 Gameplay Updates**  
