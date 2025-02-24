@@ -21,6 +21,8 @@ public class CharacterBase : Damageable
 
     [Header("Character Settings")]
     [SerializeField] protected Animator animator;
+    [SerializeField] protected float attackAnimDuration = 0.5f;
+
     protected virtual void Start()
     {
         currentHealth = health; // Initialize health
@@ -49,7 +51,13 @@ public class CharacterBase : Damageable
     protected virtual void DetectAndAttack()
     {
         float rayDistance = range * 2; // Convert range to world distance
-
+        if (range == -1)
+        {
+            attackCooldown = attackRate;
+            Invoke(nameof(Attack), attackAnimDuration);
+            animator.SetTrigger("Attack");
+            return;
+        }
         // Perform a raycast to detect an enemy
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin.position, rayDirection, rayDistance, targetLayer);
 
@@ -57,6 +65,22 @@ public class CharacterBase : Damageable
         {
             Attack(hit.collider.gameObject);
         }
+    }
+
+    protected virtual void Attack()
+    {
+        //if (animator != null)
+        //{
+        //    animator.SetTrigger("Attack");
+        //}
+
+        // If using projectiles
+        if (attackPrefab != null)
+        {
+            Instantiate(attackPrefab, rayOrigin.position, Quaternion.identity);
+        }
+
+        //attackCooldown = attackRate; // Reset cooldown
     }
 
     // Handles attack logic

@@ -12,8 +12,8 @@ public class KnightBase : CharacterBase
     private float attackTimer = 0f;
     private bool isAttacking = false;
 
-    [Header("Health")]
-    [SerializeField] private float attackAnimDuration = 0.5f;
+    //[Header("Health")]
+    //[SerializeField] private float attackAnimDuration = 0.5f;
 
     protected override void Start()
     {
@@ -157,7 +157,7 @@ public class KnightBase : CharacterBase
         //animator.SetBool("isAttacking", false);
         //animator.SetBool("isDead", true);
         animator.SetTrigger("isDead");
-        //GameManager.Instance.MarkKnightDeath(gameObject);
+        GameManager.Instance.MarkKnightDeath(gameObject);
 
         Destroy(gameObject, 1f); // Delay destruction for animation
     }
