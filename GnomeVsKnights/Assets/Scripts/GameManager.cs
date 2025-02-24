@@ -424,7 +424,7 @@ public class GameManager : Singleton<GameManager>
             PauseAllEntities(false);
         }
     }
-    private void Awake()
+  /*  private void Awake()
     {
         if (Instance == null)
         {
@@ -435,7 +435,7 @@ public class GameManager : Singleton<GameManager>
             Destroy(gameObject);
             return;
         }
-    }
+    }*/
 
 
     // Stops all moving objects and animations
