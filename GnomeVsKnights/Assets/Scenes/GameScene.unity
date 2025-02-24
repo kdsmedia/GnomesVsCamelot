@@ -2762,19 +2762,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 558074511}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 740751757}
-        m_TargetAssemblyTypeName: LocalGameManager, Assembly-CSharp
-        m_MethodName: SelectGnome
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &558074511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6981,19 +6969,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1335747255}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 740751757}
-        m_TargetAssemblyTypeName: LocalGameManager, Assembly-CSharp
-        m_MethodName: SelectGnome
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1335747255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8923,7 +8899,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 571391337}
   sfxSource: {fileID: 1246604419}
-  backgroundMusic: {fileID: 8300000, guid: 6d23194c682231447a84aa74c2c0070f, type: 3}
+  mainMenuMusic: {fileID: 0}
+  gameSceneMusic: {fileID: 0}
+  winnerMusic: {fileID: 0}
+  gameOverMusic: {fileID: 0}
   buttonClickSound: {fileID: 8300000, guid: 61ec4d594c5f69b498bd3e29d9791df2, type: 3}
 --- !u!4 &1780151177
 Transform:
@@ -9025,19 +9004,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1802641363}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 740751757}
-        m_TargetAssemblyTypeName: LocalGameManager, Assembly-CSharp
-        m_MethodName: SelectGnome
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1802641363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10153,19 +10120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2135985359}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 740751757}
-        m_TargetAssemblyTypeName: LocalGameManager, Assembly-CSharp
-        m_MethodName: SelectGnome
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2135985359
 MonoBehaviour:
   m_ObjectHideFlags: 0

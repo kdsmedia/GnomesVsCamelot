@@ -18,6 +18,7 @@ public class KnightBase : CharacterBase
     protected override void Start()
     {
         base.Start();
+        attackCooldown = 3 * moveSpeed;
         //animator.SetBool("isWalking", true); // Start walking by default
     }
 

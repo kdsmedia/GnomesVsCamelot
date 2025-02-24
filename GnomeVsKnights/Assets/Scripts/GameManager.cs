@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
     private int energyTicksProcessed = 0;
     private List<int> spawnQueue = new List<int>();
 
-     public static GameManager Instance { get; private set; }
+     //public static GameManager Instance { get; private set; }
     private void Start()
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
