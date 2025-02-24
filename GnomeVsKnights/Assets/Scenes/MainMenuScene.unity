@@ -4496,6 +4496,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 660606665612102594, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: winnerMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 32202c7e0f686514ea14d857c6bfa079, type: 3}
+    - target: {fileID: 660606665612102594, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: gameOverMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: 99e3334fd80768a4d9edcbe4b9d0f9a5, type: 3}
+    - target: {fileID: 660606665612102594, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: mainMenuMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: e1ac7c138e93c2a4e964212c2d2aefe8, type: 3}
+    - target: {fileID: 660606665612102594, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: gameSceneMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: e024044f9c2f3fd479004c675d40b989, type: 3}
+    - target: {fileID: 2133812778896080583, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2133812778896080583, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2706811352785684244, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
       propertyPath: menuPrefab
       value: 
@@ -4540,6 +4564,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4310827953653938982, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: e1ac7c138e93c2a4e964212c2d2aefe8, type: 3}
+    - target: {fileID: 4310827953653938982, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: e1ac7c138e93c2a4e964212c2d2aefe8, type: 3}
     - target: {fileID: 7165061487894289351, guid: 7ead85dde7c926042a0e71c687136517, type: 3}
       propertyPath: m_Name
       value: MainMenu/Audio Manager
