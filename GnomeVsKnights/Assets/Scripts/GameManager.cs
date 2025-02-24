@@ -509,4 +509,9 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenuScene");
     }
+
+    public void MarkKnightDeath(GameObject obj)
+    {
+        spawnedKnights.Remove(obj);
+    }
 }

@@ -3,18 +3,18 @@ using UnityEngine.UIElements;
 
 public class EnergyGnome : MonoBehaviour
 {
-    private float fallYPos;
-    private float fallSpeed = .8f;
-    private int energyValue = 25;
+    protected float fallYPos;
+    protected float fallSpeed = .8f;
+    protected int energyValue = 25;
 
-    void Start()
+    protected virtual void Start()
     {
         transform.position = new Vector3(Random.Range(-5.3f, 5.3f), 7, -0.1f);
         fallYPos = Random.Range(-3, 3);
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (transform.position.y >= fallYPos)
         {
