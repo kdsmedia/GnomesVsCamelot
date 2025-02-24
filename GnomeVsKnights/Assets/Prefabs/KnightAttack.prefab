@@ -104,7 +104,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   hitRadius: 0.5
-  damage: 10
-  attackLifespan: 2
-  maxHits: 3
-  ProjectileSpeed: -10
+  damage: 15
+  attackLifespan: 4
+  maxHits: 2
+  projectileSpeed: 5
+  attackFXPrefab: {fileID: 0}
+  launchDirection: {x: -1, y: 0, z: 0}

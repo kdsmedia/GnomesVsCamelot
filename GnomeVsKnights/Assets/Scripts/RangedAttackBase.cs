@@ -5,6 +5,7 @@ public class RangedAttackBase : AttackBase
     [Header("Projectile Settings")]
     [SerializeField] protected float projectileSpeed = 5f;
     [SerializeField] protected GameObject attackFXPrefab; // FX prefab for attack visuals
+    [SerializeField] protected Vector3 launchDirection = Vector3.right;
 
     private SpriteRenderer spriteRenderer;
     private bool hasHitTarget = false;
@@ -23,26 +24,28 @@ public class RangedAttackBase : AttackBase
 
     protected override void FixedUpdate()
     {
-        if (!hasHitTarget)
-        {
-            transform.position += Vector3.right * (projectileSpeed * Time.fixedDeltaTime);
-        }
+    //    if (!hasHitTarget)
+    //    {
+    //        transform.position += launchDirection * (projectileSpeed * Time.fixedDeltaTime);
+    //    }
+        base.FixedUpdate();
+        transform.position += launchDirection * (projectileSpeed * Time.fixedDeltaTime);
     }
 
-    protected void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent(out IDamageable enemy) && !hasHitTarget)
-        {
-            enemy.TakeDamage(Mathf.RoundToInt(damage)); // Deal damage
+    //protected void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.TryGetComponent(out IDamageable enemy) && !hasHitTarget)
+    //    {
+    //        enemy.TakeDamage(Mathf.RoundToInt(damage)); // Deal damage
 
-            hasHitTarget = true; // Prevents multiple hits
+    //        hasHitTarget = true; // Prevents multiple hits
 
-            if (attackFXPrefab != null)
-            {
-                Instantiate(attackFXPrefab, transform.position, Quaternion.identity); // Spawn attack FX
-            }
+    //        if (attackFXPrefab != null)
+    //        {
+    //            Instantiate(attackFXPrefab, transform.position, Quaternion.identity); // Spawn attack FX
+    //        }
 
-            Destroy(gameObject); // Destroy projectile after hit
-        }
-    }
+    //        Destroy(gameObject); // Destroy projectile after hit
+    //    }
+    //}
 }

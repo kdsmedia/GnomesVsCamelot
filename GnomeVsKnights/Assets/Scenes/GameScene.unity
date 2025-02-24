@@ -4432,13 +4432,19 @@ MonoBehaviour:
     knights: 00000000
   - spawnTime: 25
     isWave: 0
-    knights: 00000000
+    knights: 0000000001000000
   - spawnTime: 35
     isWave: 1
     knights: 0000000001000000
+  - spawnTime: 37
+    isWave: 0
+    knights: 0000000001000000
+  - spawnTime: 39
+    isWave: 0
+    knights: 01000000
   knightPrefabs:
   - {fileID: 826491745680627015, guid: 5b80c4db00d4bfc4e803083dc3f350af, type: 3}
-  - {fileID: 8236419659464331663, guid: 6e831593f51041347bc4d6cd47053a93, type: 3}
+  - {fileID: 877622317371001054, guid: 8e7c0b50151cdf341bf9b4f336f00a05, type: 3}
   maxWaves: 2
 --- !u!114 &740751758
 MonoBehaviour:

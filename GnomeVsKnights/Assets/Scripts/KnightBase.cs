@@ -4,13 +4,13 @@ public class KnightBase : CharacterBase
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 1f;
-    private bool isMoving = true;
+    [SerializeField] private bool isMoving = true;
 
     [Header("Attack")]
     [SerializeField] private float attackRange = 0.5f;
     //  [SerializeField] private new float attackCooldown = 1f;
     private float attackTimer = 0f;
-    private bool isAttacking = false;
+    [SerializeField] private bool isAttacking = false;
 
     //[Header("Health")]
     //[SerializeField] private float attackAnimDuration = 0.5f;
@@ -86,7 +86,7 @@ public class KnightBase : CharacterBase
         //    //animator.SetBool("isAttacking", false);
         //}
         // Detects enemies and attacks when in range
-        float rayDistance = range * 2; // Convert range to world distance
+        float rayDistance = attackRange * 2; // Convert range to world distance
 
         // Perform a raycast to detect an enemy
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin.position, rayDirection, rayDistance, targetLayer);
@@ -95,6 +95,7 @@ public class KnightBase : CharacterBase
         {
             isMoving = false;
         }
+        else if (!isAttacking) isMoving = true;
     }
 
     protected override void Attack(GameObject target)
@@ -108,16 +109,16 @@ public class KnightBase : CharacterBase
         isAttacking = true;
         base.Attack(target);
 
-        if (target.TryGetComponent(out GnomeBase gnome))
-        {
-            gnome.TakeDamage(attackDamage);
+        //if (target.TryGetComponent(out GnomeBase gnome))
+        //{
+        //    gnome.TakeDamage(attackDamage);
 
-            if (gnome.Health <= 0) // ✅ Now this will work!
-            {
-                Vector3Int gnomeCell = GameManager.Instance.map.WorldToCell(target.transform.position);
-                GameManager.Instance.KillGnome(gnomeCell);
-            }
-        }
+        //    if (gnome.Health <= 0) // ✅ Now this will work!
+        //    {
+        //        Vector3Int gnomeCell = GameManager.Instance.map.WorldToCell(target.transform.position);
+        //        GameManager.Instance.KillGnome(gnomeCell);
+        //    }
+        //}
 
         Invoke(nameof(EndAttack), attackAnimDuration);
     }
