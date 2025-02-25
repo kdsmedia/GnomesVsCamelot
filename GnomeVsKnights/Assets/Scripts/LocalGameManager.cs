@@ -18,6 +18,7 @@ public class LocalGameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private KnightSpawnStruct[] knightSpawnInformation;
     [SerializeField] private GameObject[] knightPrefabs;
+    [SerializeField] private List<GameObject> spawnedKnights;
     [SerializeField] private int maxWaves;
 
     private LocalAudioManager localAudioManager;//sfx and music
@@ -50,7 +51,7 @@ public class LocalGameManager : MonoBehaviour
         GameManager.Instance.knightSpawnInformation = knightSpawnInformation;
         GameManager.Instance.knightPrefabs = knightPrefabs;
         GameManager.Instance.maxWaves = maxWaves;
-
+        GameManager.Instance.spawnedKnights = spawnedKnights;
         GameManager.Instance.Inititialize();
     }
 
