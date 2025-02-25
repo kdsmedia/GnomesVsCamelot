@@ -2,8 +2,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-//This class should only function as a relay for GameManager.cs. There should be no logic here besides setting values
-//upon start and passing method calls that cannot directly reference the GameManager class
 public class LocalGameManager : MonoBehaviour
 {
     [SerializeField] private Tilemap tilemap;
