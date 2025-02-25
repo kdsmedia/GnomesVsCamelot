@@ -108,10 +108,11 @@ MonoBehaviour:
     m_Bits: 128
   hitRadius: 0.5
   damage: 10
-  attackLifespan: 2.5
+  attackLifespan: 10
   maxHits: 3
   projectileSpeed: 5
   attackFXPrefab: {fileID: 0}
+  launchDirection: {x: 1, y: 0, z: 0}
 --- !u!95 &2000055308893460840
 Animator:
   serializedVersion: 7

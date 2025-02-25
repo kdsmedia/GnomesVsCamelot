@@ -103,10 +103,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
-  health: 100
-  attackRate: 1
-  attackDamage: 10
-  range: 8
+  health: 150
+  attackRate: 0.5
+  attackDamage: 15
+  range: 1
   attackPrefab: {fileID: 0}
   rayOrigin: {fileID: 9045198233709306633}
   rayDirection: {x: 1, y: 0, z: 0}

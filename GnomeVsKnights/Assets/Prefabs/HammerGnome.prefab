@@ -104,8 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 50
   health: 100
-  attackRate: 1
-  attackDamage: 10
+  attackRate: 2
+  attackDamage: 30
   range: 8
   attackPrefab: {fileID: 8236419659464331663, guid: efa1393b610803643b309a1a82bc1cfb, type: 3}
   rayOrigin: {fileID: 3463305221792639430}
@@ -114,6 +114,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   animator: {fileID: 3644227835630616065}
+  attackAnimDuration: 0.5
   cost: 50
 --- !u!95 &3644227835630616065
 Animator:
