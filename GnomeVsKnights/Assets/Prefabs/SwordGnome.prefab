@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
-  health: 100
+  health: 150
   attackRate: 0.5
   attackDamage: 15
   range: 1
