@@ -29,11 +29,11 @@ public class LocalGameManager : MonoBehaviour
         if (audioManagers.Length > 0)
         {
             localAudioManager = audioManagers[0]; // Assign the first instance
-            Debug.Log("🎵 LocalGameManager: LocalAudioManager found.");
+          //  Debug.Log("🎵 LocalGameManager: LocalAudioManager found.");
         }
         else
         {
-            Debug.LogWarning("⚠️ LocalGameManager: No LocalAudioManager found in scene!");
+          // Debug.LogWarning("⚠️ LocalGameManager: No LocalAudioManager found in scene!");
         }
 
         GameManager.Instance.cam = cam;
