@@ -7,7 +7,7 @@ public class KnightBase : CharacterBase
     [SerializeField] private bool isMoving = true;
 
     [Header("Attack")]
-    [SerializeField] private float attackRange = 0.5f;
+   // [SerializeField] private float attackRange = 0.5f;
     //  [SerializeField] private new float attackCooldown = 1f;
     private float attackTimer = 0f;
     [SerializeField] private bool isAttacking = false;
@@ -36,10 +36,10 @@ public class KnightBase : CharacterBase
             Move();
         }
 
-        //if (attackTimer > 0)
-        //{
-        //    DetectGnome();
-        //}
+        if (attackTimer > 0)
+        {
+            DetectGnome();
+        }
     }
 
     private void Move()

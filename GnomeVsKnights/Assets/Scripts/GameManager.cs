@@ -331,8 +331,37 @@ public class GameManager : Singleton<GameManager>
     }
     public void ResetGame()
     {
-        placedGnomes.Clear();  // ✅ Clears all placed gnomes
-        map = null;  // ✅ Remove Tilemap reference to prevent errors
+        placedGnomes.Clear();  // Clears all placed gnomes
+        map = null;  //  Remove Tilemap reference to prevent errors
+
+        // Reset energy to default value
+        playerEnergy = 100;
+        UpdateEnergyUI();
+
+        // Reset waves to default values
+        currentWave = 1;
+        knightSpawnIndex = 0;
+        spawnedKnights.Clear();
+        spawnQueue.Clear();
+        timeElapsed = 0;
+        lastSpawnTime = 0;
+        UpdateWaveUI();
+
+        // Reset knight spawn timer
+        StopAllCoroutines(); // Ensure no old knight spawn routines are running
+
+        // Reset game state
+        gameEnded = false;
+        pauseMenu.SetActive(false);
+        winnerPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
+
+        // Restart scene music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.MusicSource.Stop();
+            AudioManager.Instance.MusicSource.Play();
+        }
     }
 
 
