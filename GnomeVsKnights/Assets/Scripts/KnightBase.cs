@@ -45,7 +45,7 @@ public class KnightBase : CharacterBase
     {
         if (GameManager.Instance == null || GameManager.Instance.map == null)
         {
-            Destroy(gameObject);  // ✅ Destroy knight if GameManager or map is missing
+            Destroy(gameObject);  // Destroy knight if GameManager or map is missing
             return;
         }
 
@@ -85,6 +85,7 @@ public class KnightBase : CharacterBase
         //    //animator.SetBool("isWalking", true);
         //    //animator.SetBool("isAttacking", false);
         //}
+
         // Detects enemies and attacks when in range
         float rayDistance = range * 2; // Convert range to world distance
 
@@ -112,7 +113,7 @@ public class KnightBase : CharacterBase
         {
             gnome.TakeDamage(attackDamage);
 
-            if (gnome.Health <= 0) // ✅ Now this will work!
+            if (gnome.Health <= 0) 
             {
                 Vector3Int gnomeCell = GameManager.Instance.map.WorldToCell(target.transform.position);
                 GameManager.Instance.KillGnome(gnomeCell);
@@ -128,8 +129,6 @@ public class KnightBase : CharacterBase
     {
         isAttacking = false;
         isMoving = true;
-        //animator.SetBool("isWalking", true);
-        //animator.SetBool("isAttacking", false);
     }
 
     public override void TakeDamage(int damage)
