@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
@@ -18,29 +19,17 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource MusicSource => musicSource;
     public AudioSource SFXSource => sfxSource;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);  // ✅ Destroy duplicates first
-            return;
-        }
-
-        Instance = this;  // ✅ Assign the instance AFTER duplicate check
-        DontDestroyOnLoad(gameObject);  // ✅ Ensure persistence AFTER ensuring uniqueness
-    }
-
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        RegisterAllButtons(); // Automatically register button click SFX
 
         if (musicSource != null)
         {
             float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
             musicSource.volume = savedVolume;
 
-            if (!musicSource.isPlaying)  // ✅ Ensure music starts playing
+            if (!musicSource.isPlaying)
             {
                 PlaySceneMusic(SceneManager.GetActiveScene().name);
             }
@@ -50,6 +39,7 @@ public class AudioManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         PlaySceneMusic(scene.name);
+        RegisterAllButtons(); // Re-register buttons when scene changes
     }
 
     public void PlaySceneMusic(string sceneName)
@@ -67,6 +57,7 @@ public class AudioManager : MonoBehaviour
         {
             musicSource.Stop();
             musicSource.clip = newMusic;
+
             if (newMusic != null)
                 musicSource.Play();
         }
@@ -91,4 +82,24 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(clip);
         }
     }
+
+    // ✅ Automatically add PlaySFX to all UI buttons in the scene
+    private void RegisterAllButtons()
+    {
+        Button[] buttons = FindObjectsByType<Button>(FindObjectsSortMode.None);
+
+
+        foreach (Button button in buttons)
+        {
+            button.onClick.AddListener(() => PlaySFX(buttonClickSound));
+        }
+    }
+    public void PlayButtonClickSFX()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClickSound);
+        }
+    }
+
 }
