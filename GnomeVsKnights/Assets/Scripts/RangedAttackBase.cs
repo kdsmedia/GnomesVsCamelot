@@ -8,7 +8,7 @@ public class RangedAttackBase : AttackBase
     [SerializeField] protected Vector3 launchDirection = Vector3.right;
 
     private SpriteRenderer spriteRenderer;
-    private bool hasHitTarget = false;
+   // private bool hasHitTarget = false;
 
     protected override void Start()
     {
