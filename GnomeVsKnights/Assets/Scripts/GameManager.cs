@@ -265,7 +265,7 @@ public class GameManager : Singleton<GameManager>
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
 
-        // ✅ Play game over music
+        // Play game over music
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.gameOverMusic);
@@ -332,13 +332,13 @@ public class GameManager : Singleton<GameManager>
     public void ResetGame()
     {
         placedGnomes.Clear();  // Clears all placed gnomes
-        map = null;  // Remove Tilemap reference to prevent errors
+        map = null;  // ✅ Remove Tilemap reference to prevent errors
 
-        // Reset energy to default value
+        // Fully reset energy and update UI
         playerEnergy = 100;
         UpdateEnergyUI();
 
-        // Reset waves and knight spawn queue
+        //  Reset waves, spawn queue, and timers
         currentWave = 1;
         knightSpawnIndex = 0;
         spawnedKnights.Clear();
@@ -348,25 +348,26 @@ public class GameManager : Singleton<GameManager>
 
         UpdateWaveUI();
 
-        // Reset knight spawn timer
-        StopAllCoroutines(); // Ensure no old knight spawn routines are running
+        // ✅ Reset knight spawn timer
+        StopAllCoroutines(); // Prevent any old spawn timers from interfering
 
-        // Reset game state
+        // ✅ Reset game state
         gameEnded = false;
         pauseMenu.SetActive(false);
         winnerPanel.SetActive(false);
         gameOverPanel.SetActive(false);
 
-        // Restart scene music properly
+        // ✅ Restart scene music properly
         if (AudioManager.Instance != null && AudioManager.Instance.MusicSource != null)
         {
             AudioManager.Instance.MusicSource.Stop();
-            AudioManager.Instance.MusicSource.time = 0;  // Ensure music starts from the beginning
+            AudioManager.Instance.MusicSource.time = 0;  // ✅ Ensure music starts from the beginning
             AudioManager.Instance.MusicSource.Play();
         }
     }
 
-public void UpdateEnergyUI()
+
+    public void UpdateEnergyUI()
     {
         energyText.text = playerEnergy.ToString();
     }
@@ -432,15 +433,23 @@ public void UpdateEnergyUI()
 
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1;
+        Time.timeScale = 1;  // ✅ Ensure normal game speed
 
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlaySceneMusic("MainMenuScene");  // ✅ Switch back to main menu music
+            AudioManager.Instance.PlaySceneMusic("MainMenuScene");  // Switch back to main menu music
         }
 
+        // Reset the entire game state when leaving to Main Menu
+        ResetGame();
+
+        // Ensure GameManager is destroyed to prevent old states persisting
+        Destroy(gameObject);
+
+        // Load the Main Menu Scene
         SceneManager.LoadScene("MainMenuScene");
     }
+
 
     public void MarkKnightDeath(GameObject obj)
     {
