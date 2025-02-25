@@ -246,31 +246,34 @@ public class GameManager : Singleton<GameManager>
         spawnedKnights.Add(knight);
     }
 
-    private void ShowWinnerScreen()
-    {
-        gameEnded = true;
-        winnerPanel.SetActive(true);
-        Time.timeScale = 0;
-
-        // ✅ Play winner music
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.winnerMusic);
-        }
-    }
-
     private void ShowGameOverScreen()
     {
         gameEnded = true;
         gameOverPanel.SetActive(true);
-        Time.timeScale = 0;
+        Time.timeScale = 0; // Pause game on death or gameover
 
-        // Play game over music
-        if (AudioManager.Instance != null)
+       
+        LocalAudioManager audioManager = UnityEngine.Object.FindFirstObjectByType<LocalAudioManager>();
+        if (audioManager != null)
         {
-            AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.gameOverMusic);
+            audioManager.PlayGameOverMusic();
         }
     }
+
+    private void ShowWinnerScreen()
+    {
+        gameEnded = true;
+        winnerPanel.SetActive(true);
+        Time.timeScale = 0; // Pause game on win
+
+        
+        LocalAudioManager audioManager = UnityEngine.Object.FindFirstObjectByType<LocalAudioManager>();
+        if (audioManager != null)
+        {
+            audioManager.PlayWinnerMusic();
+        }
+    }
+
 
     private int getInput(int button)
     {
