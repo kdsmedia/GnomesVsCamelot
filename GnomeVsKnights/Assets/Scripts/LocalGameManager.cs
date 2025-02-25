@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -20,8 +20,23 @@ public class LocalGameManager : MonoBehaviour
     [SerializeField] private GameObject[] knightPrefabs;
     [SerializeField] private int maxWaves;
 
+    private LocalAudioManager localAudioManager;//sfx and music
+
     private void Start()
     {
+        localAudioManager = FindObjectsByType<LocalAudioManager>(FindObjectsSortMode.None)[0];
+        
+        LocalAudioManager[] audioManagers = FindObjectsByType<LocalAudioManager>(FindObjectsSortMode.None);
+        if (audioManagers.Length > 0)
+        {
+            localAudioManager = audioManagers[0]; // Assign the first instance
+            Debug.Log("🎵 LocalGameManager: LocalAudioManager found.");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ LocalGameManager: No LocalAudioManager found in scene!");
+        }
+
         GameManager.Instance.cam = cam;
         GameManager.Instance.map = tilemap;
         GameManager.Instance.placementPrefabs = placementPrefabs;
@@ -37,5 +52,14 @@ public class LocalGameManager : MonoBehaviour
         GameManager.Instance.maxWaves = maxWaves;
 
         GameManager.Instance.Inititialize();
+    }
+
+     // Optional: Play SFX from LocalAudioManager if needed just in case
+    public void PlayButtonClickSFX()
+    {
+        if (localAudioManager != null)
+        {
+            localAudioManager.PlayButtonClickSFX();
+        }
     }
 }

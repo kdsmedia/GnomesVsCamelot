@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1676843778810569285}
   - component: {fileID: 6370185350037542064}
   - component: {fileID: 242643439983989000}
+  - component: {fileID: 9160388581518572050}
   m_Layer: 7
-  m_Name: stump_energy_0
+  m_Name: stump_energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4614349903216025058}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.05}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.049999997}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 1696595238, guid: c9adb8390d12828469c863158e9d138c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -110,3 +111,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9160388581518572050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614349903216025058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d592608c0518a4dbe000fa20647bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 50
+  health: 100
+  attackRate: 8
+  attackDamage: 10
+  range: -1
+  attackPrefab: {fileID: 6357619720852110517, guid: b2f3cbbf5a985ac4a835763f8c9bc8bd, type: 3}
+  rayOrigin: {fileID: 1676843778810569285}
+  rayDirection: {x: 1, y: 0, z: 0}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  animator: {fileID: 242643439983989000}
+  attackAnimDuration: 4.5
+  cost: 75

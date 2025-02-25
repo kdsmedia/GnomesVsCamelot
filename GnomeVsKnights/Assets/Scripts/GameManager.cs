@@ -18,13 +18,8 @@ public class GameManager : Singleton<GameManager>
     private bool touchBegan = false;
     private GameObject placementIndicator = null;
     public Dictionary<Vector3Int, GnomeBase> placedGnomes = new Dictionary<Vector3Int, GnomeBase>();
-    //public List<GameObject> knightQueue;
     public List<GameObject> spawnedKnights = new List<GameObject>();
     private int placementType = 0;
-    //public float knightSpawnInterval = 1.5f;
-    //private int knightsToSpawn = 0; // Number of knights left to spawn in the current wave
-    //private bool isWaveActive = false;
-    //private float knightSpawnTimer = 0f;
 
     public KnightSpawnStruct[] knightSpawnInformation;
     public GameObject[] knightPrefabs;
@@ -43,14 +38,10 @@ public class GameManager : Singleton<GameManager>
 
     public bool isFastForward = false;
 
-    private float dt = 0;
-
     private float timeElapsed = 0;
     private float lastSpawnTime = 0;
-    private int energyTicksProcessed = 0;
     private List<int> spawnQueue = new List<int>();
 
-     public static GameManager Instance { get; private set; }
     private void Start()
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
@@ -67,7 +58,6 @@ public class GameManager : Singleton<GameManager>
         knightSpawnIndex = 0;
         timeElapsed = 0;
         lastSpawnTime = 0;
-        energyTicksProcessed = 0;
         currentWave = 1;
         spawnedKnights.Clear();
         UpdateWaveUI();
@@ -81,8 +71,6 @@ public class GameManager : Singleton<GameManager>
         if (!this.enabled) return;
 
         if (gameEnded) return;
-
-
 
         timeElapsed += Time.deltaTime;
         UpdateEnergyUI();
@@ -203,19 +191,39 @@ public class GameManager : Singleton<GameManager>
                     return;
                 }
 
-                GnomeBase gnomeCost = fullGnomes[placementType].GetComponent<GnomeBase>();
-                if (playerEnergy >= gnomeCost.cost)
+                GnomeBase gnomePrefab = fullGnomes[placementType].GetComponent<GnomeBase>();
+
+                if (gnomePrefab == null)
+                {
+                    Debug.LogError($"❌ Invalid GnomeBase reference for placementType {placementType}");
+                    return;
+                }
+
+                if (playerEnergy >= gnomePrefab.cost)
                 {
                     GameObject gnome = Instantiate(fullGnomes[placementType]);
                     gnome.transform.position = GetWorld(at) + new Vector3(map.cellSize.x * 0.5f, map.cellSize.y * 0.5f, 0);
                     GnomeBase gnomeData = gnome.GetComponent<GnomeBase>();
-                    gnomeData.Cell = at;
-                    placedGnomes.Add(at, gnomeData);
 
-                    Debug.Log($"Placed gnome of type {placementType} at {at}");
+                    if (gnomeData != null)
+                    {
+                        gnomeData.Cell = at;
+                        placedGnomes.Add(at, gnomeData);
+                        playerEnergy -= gnomeData.cost;
+                        UpdateEnergyUI();  // ✅ Immediately update UI to reflect energy cost
+                    }
+                    else
+                    {
+                        Debug.LogError("❌ GnomeBase component missing on instantiated object!");
+                    }
 
-                    playerEnergy -= gnomeData.cost;
+                    Debug.Log($"✅ Placed {gnomePrefab.name} at {at} - Cost: {gnomePrefab.cost} Energy. Remaining: {playerEnergy}");
                 }
+                else
+                {
+                    Debug.LogWarning($"⚠️ Not enough energy! Needed: {gnomePrefab.cost}, Available: {playerEnergy}");
+                }
+
             }
             else
             {
@@ -225,17 +233,6 @@ public class GameManager : Singleton<GameManager>
             placementIndicator = null;
         }
     }
-
-    //private void SpawnKnight()
-    //{
-    //    GameObject knightPrefab = knightQueue[UnityEngine.Random.Range(0, knightQueue.Count)];
-    //    GameObject knight = Instantiate(knightPrefab);
-
-    //    // Randomize spawn row
-    //    int randomRow = UnityEngine.Random.Range(0, 5);
-    //    Vector3Int spawnCell = new Vector3Int(9, randomRow, 0);
-    //    knight.transform.position = GetWorld(spawnCell) + map.cellSize * 0.5f;
-    //}
 
     private void SpawnKnight(GameObject prefab)
     {
@@ -274,63 +271,6 @@ public class GameManager : Singleton<GameManager>
             AudioManager.Instance.PlayCustomMusic(AudioManager.Instance.gameOverMusic);
         }
     }
-
-
-    //public void NextWave()
-    //{
-    //    currentWave++;
-    //    UpdateWaveUI();
-
-    //    // Increase knight count for the wave
-    //    int knightCount = 5 + (currentWave * 2);
-    //    for (int i = 0; i < knightCount; i++)
-    //    {
-    //        GameObject knightPrefab = knightQueue[UnityEngine.Random.Range(0, knightQueue.Count)];
-    //        knightQueue.Add(knightPrefab); // Add knights to queue
-    //    }
-
-    //    winnerPanel.SetActive(false);
-    //    Time.timeScale = 1;
-    //}
-    //public void StartWave()
-    //{
-    //    currentWave++;
-    //    UpdateWaveUI();
-    //    StartCoroutine(DelayedWaveStart());
-
-    //    knightsToSpawn = 5 + (currentWave + 2);
-    //    isWaveActive = true;
-
-
-    //    winnerPanel.SetActive(false);
-
-    //    // Resume game
-    //    Time.timeScale = 1;
-    //}
-    //private IEnumerator DelayedWaveStart()
-    //{
-    //    yield return new WaitForSeconds(3f);
-
-
-    //    currentWave++;
-    //    UpdateWaveUI();
-
-    //    knightsToSpawn = 5 + (currentWave * 2);
-    //    isWaveActive = true;
-
-    //    winnerPanel.SetActive(false);
-
-    //    Time.timeScale = 1;
-    //}
-    //private void EndWave()
-    //{
-    //    isWaveActive = false;
-
-    //    winnerPanel.SetActive(true);
-
-    //    // Pause the game
-    //    Time.timeScale = 0;
-    //}
 
     private int getInput(int button)
     {
@@ -424,19 +364,6 @@ public class GameManager : Singleton<GameManager>
             PauseAllEntities(false);
         }
     }
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
-
 
     // Stops all moving objects and animations
     private void PauseAllEntities(bool isPaused)
@@ -483,5 +410,10 @@ public class GameManager : Singleton<GameManager>
         }
 
         SceneManager.LoadScene("MainMenuScene");
+    }
+
+    public void MarkKnightDeath(GameObject obj)
+    {
+        spawnedKnights.Remove(obj);
     }
 }
