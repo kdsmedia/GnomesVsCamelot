@@ -114,7 +114,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   animator: {fileID: 1794518784416941485}
-  cost: 50
+  attackAnimDuration: 0.5
+  cost: 25
 --- !u!95 &1794518784416941485
 Animator:
   serializedVersion: 7

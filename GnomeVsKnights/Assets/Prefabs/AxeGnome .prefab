@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d592608c0518a4dbe000fa20647bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 50
   health: 100
   attackRate: 1
   attackDamage: 10
@@ -113,7 +114,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   animator: {fileID: 2120868450785741554}
-  cost: 25
+  attackAnimDuration: 0.5
+  cost: 35
 --- !u!95 &2120868450785741554
 Animator:
   serializedVersion: 7
