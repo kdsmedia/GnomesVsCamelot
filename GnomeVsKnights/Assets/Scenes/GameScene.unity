@@ -3969,31 +3969,31 @@ MonoBehaviour:
   winnerPanel: {fileID: 614828824}
   gameOverPanel: {fileID: 2067243834}
   knightSpawnInformation:
-  - spawnTime: 5
+  - spawnTime: 10
     isWave: 1
     knights: 00000000
-  - spawnTime: 7
+  - spawnTime: 14
     isWave: 1
     knights: 00000000
-  - spawnTime: 12
+  - spawnTime: 24
     isWave: 1
     knights: 00000000
-  - spawnTime: 18
+  - spawnTime: 36
     isWave: 1
     knights: 00000000
-  - spawnTime: 20
+  - spawnTime: 40
     isWave: 1
     knights: 00000000
-  - spawnTime: 20
+  - spawnTime: 40
     isWave: 1
     knights: 0000000001000000
-  - spawnTime: 20
+  - spawnTime: 40
     isWave: 1
     knights: 00000000
-  - spawnTime: 20
+  - spawnTime: 40
     isWave: 1
     knights: 0000000001000000
-  - spawnTime: 30
+  - spawnTime: 60
     isWave: 1
     knights: 0000000001000000010000000100000000000000
   knightPrefabs:
