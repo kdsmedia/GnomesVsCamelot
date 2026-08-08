@@ -271,8 +271,8 @@ PlayerSettings:
   AndroidTargetArchitectures: 2
   AndroidSplashScreenScale: 1
   androidSplashScreen: {fileID: 2800000, guid: c66aed950c36ee045ac611e2a7c1c5b0, type: 3}
-  AndroidKeystoreName: '{inproject}: Keystore/user.keystore'
-  AndroidKeyaliasName: testingbuild
+  AndroidKeystoreName: '{inproject}: Keystore/gnomescamelot.keystore'
+  AndroidKeyaliasName: gnomescamelot
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0
   AndroidBuildApkPerCpuArchitecture: 0
