@@ -7,10 +7,13 @@
   changes unpushed.
 - Default remote: `origin` (https://github.com/kdsmedia/GnomesVsCamelot.git)
 - When pushing, ensure the correct upstream/branch is set (e.g. `git push -u origin <branch>`).
+- Remote URL is configured with an embedded write PAT (`$GH_TOKEN`). Use:
+  `git remote set-url origin "https://${GH_TOKEN}@github.com/kdsmedia/GnomesVsCamelot.git"`
+  The default `$GITHUB_TOKEN` env var is metadata-read only; the write PAT is `ghp_...` provided by the user.
 
 ## Branch Layout
 
-- `main` — primary working branch (local), mirrors the latest project state.
+- `main` — **default branch on remote** (origin/HEAD), primary working branch.
 - `BergusBranch` — previous default branch on remote (origin/HEAD).
 - Other remote branches: `DylanBranch`, `DylanBranchReadySave`, `Master`.
 
