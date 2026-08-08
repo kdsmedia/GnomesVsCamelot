@@ -169,8 +169,8 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.altomedia.gnomescamelot
-    Standalone: com.Unity-Technologies.com.unity.template.urp-blank
-    iPhone: com.Unity-Technologies.com.unity.template.urp-blank
+    Standalone: com.altomedia.gnomescamelot
+    iPhone: com.altomedia.gnomescamelot
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -873,16 +873,16 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: GnomeVsKnights
+  metroPackageName: com.altomedia.gnomescamelot
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: GnomeVsKnights
+  metroApplicationDescription: Gnomes vs Camelot
   wsaImages: {}
-  metroTileShortName: GnomeVsKnights
+  metroTileShortName: Gnomes vs Camelot
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -954,7 +954,7 @@ PlayerSettings:
   cloudProjectId: 2fafdd03-988d-4401-8a12-1ac103c19eb8
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: GnomeVsKnights
+  projectName: Gnomes vs Camelot
   organizationId: trevorhicks58
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
