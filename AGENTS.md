@@ -28,7 +28,7 @@
   (auto-used when `useTestAdsInDevelopment` is true on `RewardedAdManager`).
 - Manager script: `Assets/Scripts/Ads/RewardedAdManager.cs` (singleton,
   DontDestroyOnLoad, initialized from `SplashScreenManager`).
-- Reward hooks:
+- Reward hooks (all rewarded-ad buttons use the ⚡ icon/label, NOT 📺):
   - Main Menu bonus start energy (`MainMenu.WatchAdForBonusStartEnergy`)
   - In-game +50 energy (`GameManager.WatchAdForEnergy`)
   - Game Over revive (`GameManager.WatchAdToRevive`)
