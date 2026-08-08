@@ -36,6 +36,12 @@ public class GameManager : Singleton<GameManager>
     public int maxWaves = 5;
     private bool gameEnded = false;
 
+    // Bonus energy granted via rewarded ad at Main Menu (persisted across scene load).
+    private static int pendingBonusEnergy = 0;
+    // Limits how many times a player can revive via rewarded ad in a single run.
+    private int revivesUsed = 0;
+    private const int MaxRevivesPerRun = 1;
+
     public bool isFastForward = false;
 
     private float timeElapsed = 0;
@@ -46,6 +52,15 @@ public class GameManager : Singleton<GameManager>
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
+            // Apply any bonus energy granted via rewarded ad at the Main Menu.
+            if (pendingBonusEnergy > 0)
+            {
+                playerEnergy += pendingBonusEnergy;
+                pendingBonusEnergy = 0;
+                UpdateEnergyUI();
+                Debug.Log($"[GameManager] Applied bonus start energy. Total: {playerEnergy}");
+            }
+
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlaySceneMusic("GameScene");  // ✅ Play game scene music
@@ -60,6 +75,7 @@ public class GameManager : Singleton<GameManager>
         lastSpawnTime = 0;
         currentWave = 1;
         spawnedKnights.Clear();
+        revivesUsed = 0;
         UpdateWaveUI();
         pauseMenu.SetActive(false);
         winnerPanel.SetActive(false);
@@ -141,6 +157,113 @@ public class GameManager : Singleton<GameManager>
     {
         Debug.Log("A knight reached the base! Game Over.");
         ShowGameOverScreen();
+    }
+
+    /// <summary>
+    /// Reward: grant bonus start energy for the next game. Called from the Main Menu
+    /// after a rewarded ad completes. Value is applied when the GameScene loads.
+    /// </summary>
+    public static void GrantBonusStartEnergy(int amount)
+    {
+        pendingBonusEnergy += amount;
+        Debug.Log($"[GameManager] Pending bonus start energy: {pendingBonusEnergy}");
+    }
+
+    /// <summary>
+    /// Triggered by the "Watch Ad for +Energy" button during gameplay.
+    /// Shows a rewarded ad and grants +50 energy on completion.
+    /// </summary>
+    public void WatchAdForEnergy()
+    {
+        if (RewardedAdManager.Instance == null)
+        {
+            Debug.LogWarning("[GameManager] RewardedAdManager not available.");
+            return;
+        }
+
+        if (gameEnded)
+        {
+            Debug.Log("[GameManager] Cannot grant energy: game has ended.");
+            return;
+        }
+
+        Debug.Log("[GameManager] Showing rewarded ad for +50 energy.");
+        RewardedAdManager.Instance.ShowRewardedAd((bool earned) =>
+        {
+            if (earned)
+            {
+                AddEnergy(50);
+                Debug.Log("[GameManager] Reward applied: +50 energy.");
+            }
+            else
+            {
+                Debug.Log("[GameManager] No reward (ad not ready or skipped).");
+            }
+        });
+    }
+
+    /// <summary>
+    /// Triggered by the "Watch Ad to Revive" button on the Game Over panel.
+    /// Shows a rewarded ad and, on completion, clears all currently spawned knights
+    /// and resumes the game so the player can keep their placed gnomes.
+    /// </summary>
+    public void WatchAdToRevive()
+    {
+        if (RewardedAdManager.Instance == null)
+        {
+            Debug.LogWarning("[GameManager] RewardedAdManager not available.");
+            return;
+        }
+
+        if (!gameEnded)
+        {
+            Debug.Log("[GameManager] Game is not over; nothing to revive.");
+            return;
+        }
+
+        if (revivesUsed >= MaxRevivesPerRun)
+        {
+            Debug.Log($"[GameManager] No revives left (max {MaxRevivesPerRun} per run).");
+            return;
+        }
+
+        Debug.Log("[GameManager] Showing rewarded ad to revive.");
+        RewardedAdManager.Instance.ShowRewardedAd((bool earned) =>
+        {
+            if (earned)
+            {
+                ReviveAfterAd();
+            }
+            else
+            {
+                Debug.Log("[GameManager] Revive ad not ready or skipped.");
+            }
+        });
+    }
+
+    /// <summary>Resume the game after a successful revive ad.</summary>
+    private void ReviveAfterAd()
+    {
+        revivesUsed++;
+        gameEnded = false;
+
+        // Clear all knights currently on the field so the player gets a fresh chance.
+        foreach (GameObject knight in spawnedKnights)
+        {
+            if (knight != null) Destroy(knight);
+        }
+        spawnedKnights.Clear();
+        spawnQueue.Clear();
+
+        // Hide the game over panel and resume time/audio.
+        gameOverPanel.SetActive(false);
+        Time.timeScale = 1;
+        AudioListener.pause = false;
+
+        // Grant some energy so the revived player isn't immediately stuck.
+        AddEnergy(25);
+
+        Debug.Log($"[GameManager] Revived! Revives used: {revivesUsed}/{MaxRevivesPerRun}");
     }
 
     public void InitiatePlacement()

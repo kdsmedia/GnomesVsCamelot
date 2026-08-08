@@ -64,6 +64,36 @@ public class MainMenu : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Triggered by the "Watch Ad → Start with Bonus Energy" button on the Main Menu.
+    /// Shows a rewarded ad and, on completion, queues bonus start energy that is
+    /// applied automatically when the GameScene loads.
+    /// </summary>
+    public void WatchAdForBonusStartEnergy()
+    {
+        if (RewardedAdManager.Instance == null)
+        {
+            Debug.LogWarning("[MainMenu] RewardedAdManager not available.");
+            return;
+        }
+
+        Debug.Log("[MainMenu] Showing rewarded ad for bonus start energy.");
+        RewardedAdManager.Instance.ShowRewardedAd((bool earned) =>
+        {
+            if (earned)
+            {
+                // Grant +50 bonus energy for the next game.
+                GameManager.GrantBonusStartEnergy(50);
+                Debug.Log("[MainMenu] Bonus start energy granted: +50.");
+            }
+            else
+            {
+                Debug.Log("[MainMenu] Bonus energy ad not ready or skipped.");
+            }
+        });
+    }
+
+
 
     public void LoadGame()
     {
