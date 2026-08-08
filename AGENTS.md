@@ -26,8 +26,12 @@
 - Rewarded Ad Unit (Android): `ca-app-pub-6881903056221433/1098989475`
 - Test rewarded ad unit (Editor/dev): `ca-app-pub-3940256099942544/5224354917`
   (auto-used when `useTestAdsInDevelopment` is true on `RewardedAdManager`).
-- Manager script: `Assets/Scripts/Ads/RewardedAdManager.cs` (singleton,
-  DontDestroyOnLoad, initialized from `SplashScreenManager`).
+- Manager script: `Assets/Scripts/Ads/RewardedAdManager.cs` (auto-creating
+  singleton, DontDestroyOnLoad, initialized from `SplashScreenManager`).
+- UI builder: `Assets/Scripts/Ads/RewardedAdUIBuilder.cs` — uses
+  `[RuntimeInitializeOnLoadMethod(AfterSceneLoad)]` to auto-create the ⚡
+  buttons on the Canvas of MainMenuScene and GameScene with NO Unity Editor
+  editing required. Self-destructs after building.
 - Reward hooks (all rewarded-ad buttons use the ⚡ icon/label, NOT 📺):
   - Main Menu bonus start energy (`MainMenu.WatchAdForBonusStartEnergy`)
   - In-game +50 energy (`GameManager.WatchAdForEnergy`)

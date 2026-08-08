@@ -10,10 +10,8 @@ public class SplashScreenManager : MonoBehaviour
     void Start()
     {
         // Initialize AdMob as early as possible (first scene).
-        if (RewardedAdManager.Instance != null)
-        {
-            RewardedAdManager.Instance.Initialize();
-        }
+        // RewardedAdManager auto-creates itself if missing.
+        RewardedAdManager.Instance.Initialize();
 
         if (videoPlayer == null)
             videoPlayer = GetComponent<VideoPlayer>();

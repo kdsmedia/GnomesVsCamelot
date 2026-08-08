@@ -10,7 +10,23 @@ using GoogleMobileAds.Api;
 /// </summary>
 public class RewardedAdManager : MonoBehaviour
 {
-    public static RewardedAdManager Instance { get; private set; }
+    private static RewardedAdManager _instance;
+    public static RewardedAdManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindFirstObjectByType<RewardedAdManager>();
+                if (_instance == null)
+                {
+                    var go = new GameObject("RewardedAdManager");
+                    _instance = go.AddComponent<RewardedAdManager>();
+                }
+            }
+            return _instance;
+        }
+    }
 
     [Header("AdMob Configuration")]
     [Tooltip("AdMob Rewarded Ad Unit ID for Android.")]
